@@ -28,9 +28,7 @@ npm i
 
 La base de données SQL servira à enregistrer le plus gros des données relatives à l'application : **_mosquées_**, **_utilisateurs_**, **_configurations_**, **_posts_**, **_feedbacks_**, etc...
 Le choix de ce type de base de données est pour profiter des nombreuses liaisons entre différentes tables et pour avoir des résultats de requête rapides.
-Mettez en place un serveur MariaDB, manuellement ou via _XAMP_, _WAMP_, ou _MAMP_, créez une base de données au nom voulu puis importez le schéma ci dessous :
-
-![[sajda.sql]]
+Mettez en place un serveur MariaDB, manuellement ou via _XAMP_, _WAMP_, ou _MAMP_, créez une base de données au nom de `sajda`
 
 Dans le fichier .env, remplissez les données relatives à votre base de données afin d'assurer la bonne connexion à celle-ci :
 

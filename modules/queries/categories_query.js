@@ -2,7 +2,7 @@ const createCategory = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     INSERT INTO categories 
-    (name, comment) 
+    (name, comment, url_name) 
     VALUES (?);
     `;
 
@@ -29,12 +29,28 @@ const getAllCategories = (con, values) => {
   });
 };
 
+const getOneCategory = (con, values) => {
+  return new Promise((resolve, reject) => {
+    let query = `
+    SELECT *
+    FROM categories
+    WHERE url_name = ?;
+    `;
+
+    // Executing the query
+    con.query(query, values, (err, rows) => {
+      if (err) reject(err);
+      resolve(rows);
+    });
+  });
+};
+
 const updateCategory = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     UPDATE categories 
-    SET  name = ?, comment = ?
-    WHERE id = ?;
+    SET  name = ?, comment = ?, url_name = ?
+    WHERE url_name = ?;
     `;
 
     // Executing the query
@@ -50,7 +66,7 @@ const deleteCategory = (con, values) => {
     let query = `
     DELETE
     FROM categories 
-    WHERE id = ?;
+    WHERE url_name = ?;
     `;
 
     // Executing the query
@@ -64,6 +80,7 @@ const deleteCategory = (con, values) => {
 module.exports = {
   createCategory,
   getAllCategories,
+  getOneCategory,
   updateCategory,
   deleteCategory,
 };

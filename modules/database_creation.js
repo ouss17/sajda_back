@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS feedbacks (
   title varchar(100) NOT NULL,
   detail varchar(255) NOT NULL,
   created_at datetime NOT NULL,
-  target enum('mosquee','imam','','') NOT NULL,
+  target enum('mosquee','imam') NOT NULL,
   checked tinyint(1) NOT NULL,
   responded tinyint(1) NOT NULL,
   id_mosquee int(11) NOT NULL,
@@ -126,16 +126,6 @@ CREATE TABLE IF NOT EXISTS responses_feedback (
   id_feedback int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Structure de la table roles
---
-
-CREATE TABLE IF NOT EXISTS roles (
-  id int(11) NOT NULL,
-  name varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -152,7 +142,7 @@ CREATE TABLE IF NOT EXISTS users (
   external_id varchar(50) NOT NULL,
   username varchar(100) NOT NULL,
   password varchar(200) NOT NULL,
-  id_role int(11) NOT NULL
+  role enum('user','admin','gerant','imam') NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -206,19 +196,12 @@ ALTER TABLE responses_feedback
   ADD KEY id_user_who_ask (id_user_who_ask);
 
 --
--- Index pour la table roles
---
-ALTER TABLE roles
-  ADD PRIMARY KEY (id);
-
---
 -- Index pour la table users
 --
 ALTER TABLE users
   ADD PRIMARY KEY (id),
   ADD UNIQUE KEY email (email),
   ADD UNIQUE KEY username (username),
-  ADD KEY id_role (id_role);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -260,11 +243,6 @@ ALTER TABLE posts
 ALTER TABLE responses_feedback
   MODIFY id int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT pour la table roles
---
-ALTER TABLE roles
-  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table users
@@ -305,12 +283,7 @@ ALTER TABLE responses_feedback
   ADD CONSTRAINT responses_feedback_ibfk_2 FOREIGN KEY (id_user) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT responses_feedback_ibfk_3 FOREIGN KEY (id_user_who_ask) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
---
--- Contraintes pour la table users
---
-ALTER TABLE users
-  ADD CONSTRAINT users_ibfk_1 FOREIGN KEY (id_role) REFERENCES roles (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

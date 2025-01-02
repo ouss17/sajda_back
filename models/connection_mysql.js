@@ -19,7 +19,7 @@ con.connect(function (err) {
     return { result: false };
   }
   console.log("✅ Mysql Database connected");
-  createDatabase(con);
+  // createDatabase(con);
 });
 
 module.exports = con;

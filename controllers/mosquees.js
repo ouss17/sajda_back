@@ -1,3 +1,7 @@
+const fs = require("fs");
+const path = require("path");
+const readline = require("readline");
+
 const { checkBody } = require("../modules/checkBody");
 const con = require("../models/connection_mysql");
 const { isValidDateFormat } = require("../modules/checkFieldRegex");
@@ -327,5 +331,51 @@ exports.removeMosquee = async (req, res) => {
       result: false,
       error: "Vous n'avez pas les droits pour supprimer une mosquée !",
     });
+  }
+};
+
+exports.retrieveCsv = async (req, res) => {
+  const mosqueeId = req.params.mosqueeId;
+  const year = req.params.year;
+
+  const src = path.resolve(
+    __dirname,
+    `../ressources/csv/${mosqueeId}/${year}.csv`
+  );
+  const horaires = {};
+
+  try {
+    if (!fs.existsSync(src)) {
+      return res.status(404).json({ result: false, error: "File not found" });
+    }
+
+    const readStream = fs.createReadStream(src);
+    const rl = readline.createInterface({ input: readStream });
+
+    rl.on("line", (line) => {
+      const columns = line.split(";");
+
+      if (columns.length > 1) {
+        const date = columns[0].trim();
+        const dateRegex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+        if (dateRegex.test(date)) {
+          horaires[date] = columns
+            .slice(1, 7)
+            .map((time) => time.trim())
+            .filter((time) => time);
+        }
+      }
+    });
+
+    rl.on("close", () => {
+      res.json({ result: true, data: horaires });
+    });
+
+    rl.on("error", (err) => {
+      res.status(500).json({ result: false, error: err.message });
+    });
+  } catch (error) {
+    res.status(500).json({ result: false, error: error.message });
   }
 };

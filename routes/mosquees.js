@@ -1,10 +1,18 @@
 var express = require("express");
 var router = express.Router();
-const { createMosquee } = require("../controllers/mosquees");
+const { auth } = require("../middleware/auth");
+const {
+  addMosquee,
+  retrieveMosquee,
+  retrieveAllAvailableMosquee,
+  modifyMosquee,
+  removeMosquee,
+} = require("../controllers/mosquees");
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {});
-
-router.post("/", createMosquee);
+router.post("/", auth, addMosquee);
+router.get("/:mosqueeId", retrieveMosquee);
+router.get("/", retrieveAllAvailableMosquee);
+router.put("/update/:mosqueeId", auth, modifyMosquee);
+router.delete("/delete/:mosqueeId", auth, removeMosquee);
 
 module.exports = router;

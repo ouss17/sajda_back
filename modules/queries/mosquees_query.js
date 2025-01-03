@@ -2,7 +2,7 @@ const createMosquee = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     INSERT INTO mosquees 
-    (name, address, city, zip, country, date_created, numero, facebook, x, instagram, isAvailable) 
+    (name, address, city, zip, country, date_created, numero, facebook, x, instagram) 
     VALUES (?);
     `;
 
@@ -35,7 +35,24 @@ const getOneMosquee = (con, values) => {
     let query = `
     SELECT *
     FROM mosquees
-    WHERE id = ?;
+    INNER JOIN mosquee_config ON mosquees.id = mosquee_config.id_mosquee
+    WHERE mosquees.id = ?;
+    `;
+
+    // Executing the query
+    con.query(query, values, (err, rows) => {
+      if (err) reject(err);
+      resolve(rows);
+    });
+  });
+};
+
+const getOneMosqueeByLocation = (con, values) => {
+  return new Promise((resolve, reject) => {
+    let query = `
+    SELECT *
+    FROM mosquees
+    WHERE name = ? AND address = ? AND city = ? AND zip = ? AND country = ?;
     `;
 
     // Executing the query
@@ -51,7 +68,8 @@ const getAllAvailableMosquees = (con, values) => {
     let query = `
     SELECT *
     FROM mosquees
-    WHERE isAvailable = 1
+    INNER JOIN mosquee_config ON mosquees.id = mosquee_config.id_mosquee
+    WHERE mosquees.isAvailable = 1
     ORDER BY name ASC;
     `;
 
@@ -102,4 +120,5 @@ module.exports = {
   updateMosquee,
   deleteMosquee,
   getAllAvailableMosquees,
+  getOneMosqueeByLocation,
 };

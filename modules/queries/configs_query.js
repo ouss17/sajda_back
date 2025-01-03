@@ -34,8 +34,8 @@ const updateMosqueeConfig = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     UPDATE mosquee_config 
-    SET iqama_fajr = ?, iqama_dhor = ?, iqama_asr = ?, iqama_maghrib = ?, iqama_isha = ?, nb_jumuas = ?, jumuas = ?, color = ?, id_mosquee = ?
-    WHERE id = ?;
+    SET iqama_fajr = ?, iqama_dhor = ?, iqama_asr = ?, iqama_maghrib = ?, iqama_isha = ?, nb_jumuas = ?, jumuas = ?, color = ?
+    WHERE id_mosquee = ?;
     `;
 
     // Executing the query

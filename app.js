@@ -8,6 +8,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var mosqueesRouter = require("./routes/mosquees");
 var categoriesRouter = require("./routes/categories");
+var postsRouter = require("./routes/posts");
 
 require("./models/connection");
 require("./models/connection_mysql");
@@ -25,5 +26,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/mosquees", mosqueesRouter);
 app.use("/categories", categoriesRouter);
+app.use("/posts", postsRouter);
 
 module.exports = app;

@@ -63,13 +63,13 @@ const getAllPostsByMosquee = (con, values) => {
   });
 };
 
-const getAllPostsByUser = (con, values) => {
+const getAllPostsAvailable = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     SELECT *
     FROM posts
-    WHERE id_user = ?
-    ORDER BY created_at ASC;
+    WHERE active = 1
+    ORDER BY created_at DESC;
     `;
 
     // Executing the query
@@ -85,7 +85,7 @@ const getAllPostsByCategorie = (con, values) => {
     let query = `
     SELECT *
     FROM posts
-    WHERE id_category = ?
+    WHERE id_category = ? AND id_mosquee = ?
     ORDER BY created_at DESC;
     `;
 
@@ -101,7 +101,7 @@ const updatePost = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     UPDATE posts 
-    SET  title = ?, content = ?, media = ?, updated_at = ?, active = ?, id_category = ?
+    SET  title = ?, content = ?, media = ?, updated_at = ?, active = ?, id_category = ?, id_user = ?
     WHERE id = ?;
     `;
 
@@ -136,6 +136,6 @@ module.exports = {
   updatePost,
   deletePost,
   getAllPostsByMosquee,
-  getAllPostsByUser,
+  getAllPostsAvailable,
   getAllPostsByCategorie,
 };

@@ -2,7 +2,7 @@ const createFeedback = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     INSERT INTO feedbacks 
-    (title, detail, target, checked, responded, id_mosquee, id_user) 
+    (title, detail, target, id_mosquee, id_user) 
     VALUES (?);
     `;
 

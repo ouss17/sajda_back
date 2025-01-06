@@ -125,36 +125,51 @@ exports.modifyPost = async (req, res) => {
 
   if (role === "admin" || role === "gerant") {
     try {
-      const now = new Date();
+      const isExists = await getOnePost(con, [req.params.postId]);
+      if (isExists.length > 0) {
+        try {
+          const now = new Date();
 
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, "0"); // Mois entre 0-11
-      const day = String(now.getDate()).padStart(2, "0");
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, "0"); // Mois entre 0-11
+          const day = String(now.getDate()).padStart(2, "0");
 
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
-      const seconds = String(now.getSeconds()).padStart(2, "0");
+          const hours = String(now.getHours()).padStart(2, "0");
+          const minutes = String(now.getMinutes()).padStart(2, "0");
+          const seconds = String(now.getSeconds()).padStart(2, "0");
 
-      const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+          const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 
-      const post = await updatePost(con, [
-        title,
-        content,
-        media,
-        localDateTime,
-        active,
-        id_category,
-        id,
-        req.params.postId,
-      ]);
-      if (post.affectedRows === 1) {
-        res.json({
-          result: true,
-          response: "Post modifié",
+          const post = await updatePost(con, [
+            title,
+            content,
+            media,
+            localDateTime,
+            active,
+            id_category,
+            id,
+            req.params.postId,
+          ]);
+          if (post.affectedRows === 1) {
+            res.json({
+              result: true,
+              response: "Post modifié",
+            });
+          }
+        } catch (error) {
+          console.error("Error during update:", error);
+          res
+            .status(500)
+            .json({ result: false, error: "Internal server error." });
+        }
+      } else {
+        res.status(400).json({
+          result: false,
+          error: "Ce post n'existe pas",
         });
       }
     } catch (error) {
-      console.error("Error during update:", error);
+      console.error("Error during retrieve:", error);
       res.status(500).json({ result: false, error: "Internal server error." });
     }
   } else {
@@ -170,15 +185,30 @@ exports.removePost = async (req, res) => {
 
   if (role === "admin" || role === "gerant") {
     try {
-      const post = await deletePost(con, [req.params.postId]);
-      if (post.affectedRows === 1) {
-        res.json({
-          result: true,
-          response: "Post supprimé",
+      const isExists = await getOnePost(con, [req.params.postId]);
+      if (isExists.length > 0) {
+        try {
+          const post = await deletePost(con, [req.params.postId]);
+          if (post.affectedRows === 1) {
+            res.json({
+              result: true,
+              response: "Post supprimé",
+            });
+          }
+        } catch (error) {
+          console.error("Error during delete:", error);
+          res
+            .status(500)
+            .json({ result: false, error: "Internal server error." });
+        }
+      } else {
+        res.status(400).json({
+          result: false,
+          error: "Ce post n'existe pas",
         });
       }
     } catch (error) {
-      console.error("Error during delete:", error);
+      console.error("Error during retrieve:", error);
       res.status(500).json({ result: false, error: "Internal server error." });
     }
   } else {

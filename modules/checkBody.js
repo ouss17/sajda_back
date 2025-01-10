@@ -2,7 +2,7 @@
  * Check if body contains all fields
  * @param {Object} body {firstname:"john", lastname:"doe"}
  * @param {Array} keys ["firstname", "lastname"]
- * @returns true||false
+ * @returns {Boolean}
  */
 function checkBody(body, keys) {
   let isValid = true;

@@ -8,6 +8,13 @@ const {
   getOneCategory,
 } = require("../modules/queries/categories_query");
 
+/**
+ * Create a category if user is at least "gerant"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
 exports.addCategory = async (req, res) => {
   const { role } = req.user;
   const { name, comment, urlName } = req.body;
@@ -52,6 +59,13 @@ exports.addCategory = async (req, res) => {
   }
 };
 
+/**
+ * Get all categories
+ * @param {*} req unrequired
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrieveCategories = async (req, res) => {
   try {
     const categories = await getAllCategories(con);
@@ -64,6 +78,13 @@ exports.retrieveCategories = async (req, res) => {
   }
 };
 
+/**
+ * Update a category if user is at least "gerant"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
 exports.modifyCategory = async (req, res) => {
   const { role } = req.user;
   const { name, comment, urlName } = req.body;
@@ -113,6 +134,13 @@ exports.modifyCategory = async (req, res) => {
   }
 };
 
+/**
+ * Remove a category if user is at least "gerant"
+ * @param {Object} req unrequired
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
 exports.removeCategory = async (req, res) => {
   const { role } = req.user;
   if (role === "admin" || role === "gerant") {

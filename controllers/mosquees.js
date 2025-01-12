@@ -19,12 +19,11 @@ const {
 } = require("../modules/queries/configs_query");
 
 /**
- * Création d'une mosquée
- * @param {Object} req
- * @param {Object} res
- * @returns {Object} result: true||false, response: ""
- * @since 2024/12/06
- * @author Ousmane
+ * Create a mosquee if user is "admin"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.addMosquee = async (req, res) => {
   let {
@@ -143,6 +142,13 @@ exports.addMosquee = async (req, res) => {
   }
 };
 
+/**
+ * Get a mosquee
+ * @param {Object} req Unrequired
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrieveMosquee = async (req, res) => {
   try {
     const mosquee = await getOneMosquee(con, req.params.mosqueeId);
@@ -158,6 +164,13 @@ exports.retrieveMosquee = async (req, res) => {
   }
 };
 
+/**
+ * Get all mosquee available
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrieveAllAvailableMosquee = async (req, res) => {
   try {
     const mosquees = await getAllAvailableMosquees(con);
@@ -173,6 +186,13 @@ exports.retrieveAllAvailableMosquee = async (req, res) => {
   }
 };
 
+/**
+ * Update a mosquee if user is at least "gerant"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
 exports.modifyMosquee = async (req, res) => {
   let {
     name,
@@ -298,6 +318,13 @@ exports.modifyMosquee = async (req, res) => {
   }
 };
 
+/**
+ * Remove a mosquee if user is "admin"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
 exports.removeMosquee = async (req, res) => {
   const { id, role } = req.user;
   if (role == "admin") {
@@ -336,6 +363,12 @@ exports.removeMosquee = async (req, res) => {
   }
 };
 
+/**
+ * Get a mosquee time file
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ */
 exports.retrieveCsv = async (req, res) => {
   const mosqueeId = req.params.mosqueeId;
   const year = req.params.year;

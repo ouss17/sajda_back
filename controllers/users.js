@@ -18,10 +18,11 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const con = require("../models/connection_mysql");
 
 /**
- * CREATE USER
- * @param {*} req
- * @param {*} res
- * @returns {Object}
+ * Create a user if user is "admin"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.signup = async (req, res) => {
   const {
@@ -105,10 +106,11 @@ exports.signup = async (req, res) => {
 };
 
 /**
- * CONNECT USER
- * @param {*} req
- * @param {*} res
- * @returns {Object}
+ * Connect user to the database
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response with a token
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.signin = async (req, res) => {
   const { pseudo, password } = req.body;
@@ -182,9 +184,11 @@ exports.signin = async (req, res) => {
 };
 
 /**
- * GET CONNECTED USER DATA
- * @param {*} req
- * @param {*} res
+ * Get user authenticated infos
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
  */
 exports.getMe = async (req, res) => {
   try {
@@ -217,9 +221,11 @@ exports.getMe = async (req, res) => {
 };
 
 /**
- * UPDATE USER
- * @param {*} req
- * @param {*} res
+ * Update a user if authenticated
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.modifyUser = async (req, res) => {
   const {
@@ -347,9 +353,11 @@ exports.modifyUser = async (req, res) => {
 };
 
 /**
- * UPADTE USER ROLE
- * @param {*} req
- * @param {*} res
+ * Update a user role if user is at least "admin"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.modifyRole = async (req, res) => {
   const {
@@ -368,7 +376,7 @@ exports.modifyRole = async (req, res) => {
     return res.status(400).json({
       result: false,
       error:
-        "Vous ne possédez pas les droit de passer un utilisateur en admin.",
+        "Vous ne possédez pas les droits de passer un utilisateur en admin.",
     });
   }
   if (currentRole === "admin" || currentRole === "gerant") {
@@ -433,10 +441,11 @@ exports.modifyRole = async (req, res) => {
 };
 
 /**
- * UPDATE USER PASSWORD
- * @param {*} req
- * @param {*} res
- * @returns {Object}
+ * Update a user password if authenticated
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.modifyPassword = async (req, res) => {
   const {
@@ -522,9 +531,11 @@ exports.modifyPassword = async (req, res) => {
 };
 
 /**
- * DELETE USER
- * @param {*} req
- * @param {*} res
+ * Delete a user if authenticated or delete one user if "admin"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
 exports.removeUser = async (req, res) => {
   const { id, email, role } = req.user;
@@ -577,9 +588,10 @@ exports.removeUser = async (req, res) => {
 };
 
 /**
- * LOGOUT USER
- * @param {*} req
- * @param {*} res
+ * logout user authentication
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
  */
 exports.logout = (req, res) => {
   res.clearCookie("jwt");

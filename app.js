@@ -10,6 +10,7 @@ var mosqueesRouter = require("./routes/mosquees");
 var categoriesRouter = require("./routes/categories");
 var postsRouter = require("./routes/posts");
 var feedbacksRouter = require("./routes/feedbacks");
+var responsesRouter = require("./routes/responses");
 
 require("./models/connection");
 require("./models/connection_mysql");
@@ -29,5 +30,6 @@ app.use("/mosquees", mosqueesRouter);
 app.use("/categories", categoriesRouter);
 app.use("/posts", postsRouter);
 app.use("/feedbacks", feedbacksRouter);
+app.use("/responses", responsesRouter);
 
 module.exports = app;

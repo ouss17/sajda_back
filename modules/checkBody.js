@@ -3,6 +3,8 @@
  * @param {Object} body {firstname:"john", lastname:"doe"}
  * @param {Array} keys ["firstname", "lastname"]
  * @returns {Boolean}
+ * @author Ousmane
+ * @since 2025-01-12
  */
 function checkBody(body, keys) {
   let isValid = true;

@@ -10,6 +10,13 @@ const {
   getAllPostsAvailable,
 } = require("../modules/queries/posts_query");
 
+/**
+ * Create a post if user is at least "gerant"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
 exports.addPost = async (req, res) => {
   let { title, content, media, id_mosquee, id_category } = req.body;
   let { id, role } = req.user;
@@ -48,6 +55,13 @@ exports.addPost = async (req, res) => {
   }
 };
 
+/**
+ * Get all post by mosquee
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrievePostsByMosquee = async (req, res) => {
   try {
     const posts = await getAllPostsByMosquee(con, req.params.mosqueeId);
@@ -63,6 +77,13 @@ exports.retrievePostsByMosquee = async (req, res) => {
   }
 };
 
+/**
+ * Get a post
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrieveOnePost = async (req, res) => {
   try {
     const post = await getOnePost(con, req.params.postId);
@@ -80,6 +101,13 @@ exports.retrieveOnePost = async (req, res) => {
   }
 };
 
+/**
+ * Get all post by category
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrievePostsByCategory = async (req, res) => {
   try {
     const posts = await getAllPostsByCategorie(con, [
@@ -98,6 +126,13 @@ exports.retrievePostsByCategory = async (req, res) => {
   }
 };
 
+/**
+ * Get all post available
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database
+ */
 exports.retrievePostsAvailable = async (req, res) => {
   try {
     const posts = await getAllPostsAvailable(con);
@@ -113,6 +148,13 @@ exports.retrievePostsAvailable = async (req, res) => {
   }
 };
 
+/**
+ * Update a post if user is at least "gerant"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
 exports.modifyPost = async (req, res) => {
   let { title, content, media, id_category, active } = req.body;
   let { id, role } = req.user;
@@ -180,6 +222,13 @@ exports.modifyPost = async (req, res) => {
   }
 };
 
+/**
+ * Remove a post if user is at least "gerant"
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
 exports.removePost = async (req, res) => {
   let { role } = req.user;
 

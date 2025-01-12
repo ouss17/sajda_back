@@ -85,7 +85,7 @@ const getAllPostsByCategorie = (con, values) => {
     let query = `
     SELECT *
     FROM posts
-    WHERE id_category = ? AND id_mosquee = ?
+    WHERE id_category = ? AND id_mosquee = ? AND active = 1
     ORDER BY created_at DESC;
     `;
 

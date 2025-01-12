@@ -85,7 +85,7 @@ const updateResponseFeedback = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
     UPDATE responses_feedback 
-    SET  response = ?,
+    SET  response = ?
     WHERE id = ?;
     `;
 

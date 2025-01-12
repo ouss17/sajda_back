@@ -1,3 +1,10 @@
+/**
+ * Create a category in database
+ * @param {Object} con Database connection object
+ * @param {Array} values Array of values
+ * @returns object of query
+ * @see addCategory
+ */
 const createCategory = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
@@ -14,6 +21,13 @@ const createCategory = (con, values) => {
   });
 };
 
+/**
+ * Get all categories in database
+ * @param {Object} con Database connection object
+ * @param {Array} values Array of values
+ * @returns object of query
+ * @see retrieveCategories
+ */
 const getAllCategories = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
@@ -29,6 +43,13 @@ const getAllCategories = (con, values) => {
   });
 };
 
+/**
+ * Get one category in database
+ * @param {Object} con Database connection object
+ * @param {Array} values Array of values
+ * @returns object of query
+ * @author Ousmane
+ */
 const getOneCategory = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
@@ -45,6 +66,12 @@ const getOneCategory = (con, values) => {
   });
 };
 
+/**
+ * Update a category in database
+ * @param {Object} con Database connection object
+ * @param {Array} values Array of values
+ * @returns object of query
+ */
 const updateCategory = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
@@ -61,6 +88,12 @@ const updateCategory = (con, values) => {
   });
 };
 
+/**
+ * Remove a category in database
+ * @param {Object} con Database connection object
+ * @param {Array} values Array of values
+ * @returns object of query
+ */
 const deleteCategory = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `

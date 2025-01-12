@@ -1,38 +1,36 @@
 const { checkBody } = require("../modules/checkBody");
 const con = require("../models/connection_mysql");
 const {
-  createFeedback,
-  updateFeedback,
-  getOneFeedback,
-  deleteFeedback,
-  getAllFeedbacksByMosquee,
-  getAllFeedbacksByUser,
-} = require("../modules/queries/feedbacks_query");
+  createResponseFeedback,
+  updateResponseFeedback,
+  getOneResponseFeedback,
+  deleteResponseFeedback,
+  getAllResponseFeedbacksByUser,
+} = require("../modules/queries/responses_query");
 
 /**
- * Create a feedback if user is authentified
+ * Create a feedback if user is authentified and at least imam
  * @param {Object} req Object of the request
  * @param {Object} res Object of the response
  * @returns {Object} Object response
  * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
-exports.addFeedback = async (req, res) => {
-  let { title, detail, target } = req.body;
+exports.addResponse = async (req, res) => {
+  let { response, idFeedback, idUserWhoAsk } = req.body;
   let { id, role } = req.user;
-  if (!checkBody(req.body, ["title", "detail", "target"])) {
+  if (!checkBody(req.body, ["response", "idFeedback", "idUserWhoAsk"])) {
     return res.status(400).json({
       result: false,
       error: "Vous n'avez pas rempli tous les champs.",
     });
   }
 
-  if (role !== null && role !== undefined && role !== "") {
+  if (role == "admin" || role == "gerant" || role == "imam") {
     try {
-      const feedback = await createFeedback(con, [
-        title,
-        detail,
-        target,
-        1,
+      const feedback = await createResponseFeedback(con, [
+        response,
+        idFeedback,
+        idUserWhoAsk,
         id,
       ]);
       if (feedback.affectedRows === 1) {
@@ -60,37 +58,13 @@ exports.addFeedback = async (req, res) => {
  * @returns {Object} Object response
  * @throws Exception if error occured in database, if authentification failed
  */
-exports.retrieveOneFeedback = async (req, res) => {
+exports.retrieveOneResponse = async (req, res) => {
   try {
-    const feedback = await getOneFeedback(con, [req.params.feedbackId]);
+    const feedback = await getOneResponseFeedback(con, [req.params.responseId]);
     if (feedback) {
       res.json({
         result: true,
         data: feedback[0],
-      });
-    }
-  } catch (error) {
-    console.error("Error during retrieve:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
-  }
-};
-
-/**
- * Get all feedback by mosquee if user is authentified
- * @param {Object} req Object of the request
- * @param {Object} res Object of the response
- * @returns {Object} Object response
- * @throws Exception if error occured in database, if authentification failed
- */
-exports.retrieveFeedbacksByMosquee = async (req, res) => {
-  try {
-    const feedback = await getAllFeedbacksByMosquee(con, [
-      req.params.mosqueeId,
-    ]);
-    if (feedback) {
-      res.json({
-        result: true,
-        data: feedback,
       });
     }
   } catch (error) {
@@ -106,9 +80,11 @@ exports.retrieveFeedbacksByMosquee = async (req, res) => {
  * @returns {Object} Object response
  * @throws Exception if error occured in database, if authentification failed
  */
-exports.retrieveFeedbacksByUser = async (req, res) => {
+exports.retrieveResponsesByUser = async (req, res) => {
   try {
-    const feedback = await getAllFeedbacksByUser(con, [req.params.userId]);
+    const feedback = await getAllResponseFeedbacksByUser(con, [
+      req.params.userId,
+    ]);
     if (feedback) {
       res.json({
         result: true,
@@ -128,10 +104,10 @@ exports.retrieveFeedbacksByUser = async (req, res) => {
  * @returns {Object} Object response
  * @throws Exception if error occured in database, if authentification failed or required fields are empty
  */
-exports.modifyFeedback = async (req, res) => {
-  let { checked, responded } = req.body;
+exports.modifyResponse = async (req, res) => {
+  let { response } = req.body;
   let { id, role } = req.user;
-  if (!checkBody(req.body, ["checked", "responded"])) {
+  if (!checkBody(req.body, ["response"])) {
     return res.status(400).json({
       result: false,
       error: "Vous n'avez pas rempli tous les champs.",
@@ -140,13 +116,14 @@ exports.modifyFeedback = async (req, res) => {
 
   if (role === "admin" || role === "gerant" || role === "imam") {
     try {
-      const isExists = await getOneFeedback(con, [req.params.feedbackId]);
+      const isExists = await getOneResponseFeedback(con, [
+        req.params.responseId,
+      ]);
       if (isExists.length > 0) {
         try {
-          const feedback = await updateFeedback(con, [
-            checked,
-            responded,
-            req.params.feedbackId,
+          const feedback = await updateResponseFeedback(con, [
+            response,
+            req.params.responseId,
           ]);
           if (feedback.affectedRows === 1) {
             res.json({
@@ -185,15 +162,19 @@ exports.modifyFeedback = async (req, res) => {
  * @returns {Object} Object response
  * @throws Exception if error occured in database, if authentification failed
  */
-exports.removeFeedback = async (req, res) => {
+exports.removeResponse = async (req, res) => {
   let { role } = req.user;
 
   if (role === "admin" || role === "gerant") {
     try {
-      const isExists = await getOneFeedback(con, [req.params.feedbackId]);
+      const isExists = await getOneResponseFeedback(con, [
+        req.params.responseId,
+      ]);
       if (isExists.length > 0) {
         try {
-          const feedback = await deleteFeedback(con, [req.params.feedbackId]);
+          const feedback = await deleteResponseFeedback(con, [
+            req.params.responseId,
+          ]);
           if (feedback.affectedRows === 1) {
             res.json({
               result: true,

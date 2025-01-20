@@ -2,37 +2,36 @@
 
 API de l'application web **sajda** contenant les informations de base de données.
 
-API mise en place avec _nodejs_, une base de données SQL gérée avec le sgbd _mariadb_ et une base de données NoSQL avec _Redis_.
+API mise en place avec *nodejs*, une base de données SQL gérée avec le SGBD *mariadb* et une base de données NoSQL avec *MongoDb*.
 
 ---
 
 ## Installations
-
+ 
 Pour installer le back-end en local, il y a plusieurs étapes à suivre :
 
 - ### Clone github
 
 Clonez le projet avec le [lien github](https://github.com/ouss17/sajda_back) grâce à la commande :
-
 ```shell
 git clone https://github.com/ouss17/sajda_back
 ```
 
 puis installez les dépendances du projet avec la commande :
 
-```shell
+``` shell
 npm i
 ```
 
 - ### Mise en place d'un serveur MySQL/MariaDB
 
-La base de données SQL servira à enregistrer le plus gros des données relatives à l'application : **_mosquées_**, **_utilisateurs_**, **_configurations_**, **_posts_**, **_feedbacks_**, etc...
+La base de données SQL servira à enregistrer le plus gros des données relatives à l'application : ***mosquées***, ***utilisateurs***, ***configurations***, ***posts***, ***feedbacks***, etc...
 Le choix de ce type de base de données est pour profiter des nombreuses liaisons entre différentes tables et pour avoir des résultats de requête rapides.
-Mettez en place un serveur MariaDB, manuellement ou via _XAMP_, _WAMP_, ou _MAMP_, créez une base de données au nom de `sajda`
+Mettez en place un serveur MariaDB, manuellement ou via *XAMP*, *WAMP*, ou *MAMP*, créez une base de données au nom de `sajda`
 
 Dans le fichier .env, remplissez les données relatives à votre base de données afin d'assurer la bonne connexion à celle-ci :
 
-```
+```env
 MYSQL_HOST=<your_host>
 
 MYSQL_USER=<user>
@@ -42,29 +41,21 @@ MYSQL_PASSWORD=<your_password>
 
 La connexion à la base de données SQL devrait fonctionner.
 
-- ### Mise en place d'un serveur Redis
+- ### Mise en place d'un serveur MongoDB
 
-La base de données NoSQL servira à enregistrer les token d'utilisateur lors de leur authentification. Elle servira aussi à vérifier leur identité lors d'action nécessitant la vérification de rôle, comme lors de la configuration d'une mosquée par exemple. Le choix d'une base de donnée qui fonctionne en key/value a été fait car il n'y aura qu'un seul type de donnée (les token) qui sera enregistré dans une seule table.
-Il y a plusieurs étapes à suivre pour mettre en place le serveur Redis :
+La base de données NoSQL servira à enregistrer les messages de différentes notifications envoyées. Ce choix a été fait pour profiter de la flexibilité de la base noSql, pour pouvoir à tout moment rajouter des notifications spécifiques.
+Mettez en place un serveur MariaDB, manuellement ou via *MongoDB Atlas*, créez une base de données au nom de `sajda`
 
-1. Créez un compte sur [Redis](https://cloud.redis.io/?_gl=1*1us3g9y*_gcl_aw*R0NMLjE3MzQ0MjkwMzIuQ2p3S0NBaUEzNFM3QmhBdEVpd0FDWnp2NFdweS1yR0VxUHhxU0tpZ2MzVUszc2VVYzRvV2RoTzJnenhOMUpHZ2Nub0ctY0tLYTRnNEZSb0NZWG9RQXZEX0J3RQ..*_gcl_au*MTAyNzg2Mjk0NS4xNzM0NDI5MDMy#/).
-2. Téléchargez l'application Redis Insight et configurez votre base de données.
-3. Créez un serveur Redis avec docker grâce à la commande suivante :
+Dans le fichier .env, remplissez les données relatives à votre base de données afin d'assurer la bonne connexion à celle-ci :
 
-```shell
-docker run --name redis-server -p 12881:6379 -d redis
+```env
+CONNECTION_STRING_MONGO=mongodb+srv://<user>:<password>@cluster0.a3nle.mongodb.net/sajda
 ```
-
-4. Si votre serveur Redis existe déjà mais n'est pas lancé, lancez le sur docker desktop puis utilisez la commande suivante :
-
-```shell
-docker exec -it redis-server redis-cli
-```
+La connexion à la base de données NoSQL devrait fonctionner.
 
 - ### Lancement du serveur node
 
 Une fois tous vos serveurs et base de données lancés, il ne reste plus qu'à lancer le serveur node en vous plaçant dans le dossier de travail et en lançant la commande :
-
 ```shell
 nodemon
 ```

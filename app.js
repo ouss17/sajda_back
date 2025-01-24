@@ -11,10 +11,10 @@ var categoriesRouter = require("./routes/categories");
 var postsRouter = require("./routes/posts");
 var feedbacksRouter = require("./routes/feedbacks");
 var responsesRouter = require("./routes/responses");
+var notificationsRouter = require("./routes/notifications");
 
 require("./models/connection");
 require("./models/connection_mysql");
-require("./models/connection_redis");
 
 var app = express();
 
@@ -31,5 +31,6 @@ app.use("/categories", categoriesRouter);
 app.use("/posts", postsRouter);
 app.use("/feedbacks", feedbacksRouter);
 app.use("/responses", responsesRouter);
+app.use("/notifications", notificationsRouter);
 
 module.exports = app;

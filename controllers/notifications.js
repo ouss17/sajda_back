@@ -41,7 +41,7 @@ exports.addNotification = async (req, res) => {
       error: "Vous n'avez pas rempli tous les champs.",
     });
   }
-  if(req.user.role !== "admin"|| role === "gerant") {
+  if(req.user.role !== "admin" || req.user.role === "gerant") {
     return res.status(400).json({
       result: false,
       error: "Vous n'avez pas les droits pour ajouter une notification !",
@@ -70,10 +70,10 @@ exports.modifyNotification = async (req, res) => {
     });
   }
 
-  if(req.user.role !== "admin" || role === "gerant") {
+  if(req.user.role !== "admin" || req.user.role === "gerant") {
     return res.status(400).json({
       result: false,
-      error: "Vous n'avez pas les droits pour ajouter une notification !",
+      error: "Vous n'avez pas les droits pour modifier une notification !",
     });
   }
 
@@ -100,10 +100,10 @@ exports.modifyNotification = async (req, res) => {
 };
 exports.removeNotification = async (req, res) => {
   const { notificationId } = req.params;
-  if(req.user.role !== "admin" || role === "gerant") {
+  if(req.user.role !== "admin" || req.user.role === "gerant") {
     return res.status(400).json({
       result: false,
-      error: "Vous n'avez pas les droits pour ajouter une notification !",
+      error: "Vous n'avez pas les droits pour supprimer une notification !",
     });
   }
   try {
@@ -111,8 +111,8 @@ exports.removeNotification = async (req, res) => {
     const notifications = db.collection("notifications");
     const result = await notifications.deleteOne({ _id: notificationId });
     res.json({ result: true, response: "Notification supprimée", data: result });
-} catch (error) {
-  console.error("Erreur :", error);
-  res.status(500).json({ result: false, error: "Erreur serveur." });
-}
+  } catch (error) {
+    console.error("Erreur :", error);
+    res.status(500).json({ result: false, error: "Erreur serveur." });
+  }
 };

@@ -112,17 +112,17 @@ exports.addMosquee = async (req, res) => {
                 });
               }
             } catch (error) {
-              console.error("Error during create config:", error);
+              console.error("Erreur lors de la création de la configuration :", error);
               res
                 .status(500)
-                .json({ result: false, error: "Internal server error." });
+                .json({ result: false, error: "Erreur interne du serveur." });
             }
           }
         } catch (error) {
-          console.error("Error during create mosquee:", error);
+          console.error("Erreur lors de la création de la mosquée :", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -131,8 +131,8 @@ exports.addMosquee = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error("Error during retrieve:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
@@ -159,8 +159,8 @@ exports.retrieveMosquee = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error during retrieve:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
   }
 };
 
@@ -181,8 +181,8 @@ exports.retrieveAllAvailableMosquee = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error during retrieve:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
   }
 };
 
@@ -287,17 +287,17 @@ exports.modifyMosquee = async (req, res) => {
                 });
               }
             } catch (error) {
-              console.error("Error during update config:", error);
+              console.error("Erreur lors de la mise à jour de la configuration :", error);
               res
                 .status(500)
-                .json({ result: false, error: "Internal server error." });
+                .json({ result: false, error: "Erreur interne du serveur." });
             }
           }
         } catch (error) {
-          console.error("Error during update mosquee:", error);
+          console.error("Erreur lors de la mise à jour de la mosquée :", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -307,13 +307,13 @@ exports.modifyMosquee = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error("Error during retrieve:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
       result: false,
-      error: "Vous n'avez pas les droits pour créer une mosquée !",
+      error: "Vous n'avez pas les droits pour modifier une mosquée !",
     });
   }
 };
@@ -340,10 +340,10 @@ exports.removeMosquee = async (req, res) => {
             });
           }
         } catch (error) {
-          console.error("Error during delete:", error);
+          console.error("Erreur lors de la suppression :", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -352,8 +352,8 @@ exports.removeMosquee = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error("Error during retrieve:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
@@ -381,7 +381,7 @@ exports.retrieveCsv = async (req, res) => {
 
   try {
     if (!fs.existsSync(src)) {
-      return res.status(404).json({ result: false, error: "File not found" });
+      return res.status(404).json({ result: false, error: "Fichier non trouvé" });
     }
 
     const readStream = fs.createReadStream(src);

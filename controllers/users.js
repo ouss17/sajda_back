@@ -47,19 +47,19 @@ exports.signup = async (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ result: false, error: "Missing or empty fields." });
+      .json({ result: false, error: "Champs manquants ou vides." });
   }
 
   if (!isValidEmail(email)) {
     return res
       .status(400)
-      .json({ result: false, error: "Please enter a valid email." });
+      .json({ result: false, error: "Veuillez entrer un email valide." });
   }
   if (!isValidPassword(password)) {
     return res.status(500).json({
       result: false,
       error:
-        "Please enter Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+        "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
     });
   }
 
@@ -98,7 +98,7 @@ exports.signup = async (req, res) => {
       }
     } else {
       // User already exists in database
-      res.json({ result: false, error: "User already exists !" });
+      res.json({ result: false, error: "L'utilisateur existe déjà !" });
     }
   } catch (error) {
     console.error("Error during signup:", error);
@@ -119,13 +119,13 @@ exports.signin = async (req, res) => {
   if (!checkBody(req.body, ["pseudo", "password"])) {
     return res
       .status(400)
-      .json({ result: false, error: "Missing or empty fields." });
+      .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (!isValidPassword(password)) {
     return res.status(500).json({
       result: false,
       error:
-        "Please enter Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+        "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
     });
   }
   try {
@@ -169,7 +169,7 @@ exports.signin = async (req, res) => {
           .json({
             result: true,
             data: userSent,
-            message: "User connected",
+            message: "Utilisateur connecté",
             token,
           });
       } else {
@@ -239,7 +239,7 @@ exports.modifyUser = async (req, res) => {
   if (!checkBody(req.body, ["pseudo", "birthDate"])) {
     return res
       .status(400)
-      .json({ result: false, error: "Missing or empty fields." });
+      .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (!isValidDateFormat(birthDate)) {
     return res
@@ -345,7 +345,7 @@ exports.modifyUser = async (req, res) => {
       }
     } else {
       // User already exists in database
-      res.json({ result: false, error: "Utilisateur existe deja !" });
+      res.json({ result: false, error: "L'utilisateur existe déjà !" });
     }
   } catch (error) {
     console.error("Error during update:", error);
@@ -371,7 +371,7 @@ exports.modifyRole = async (req, res) => {
   if (!checkBody(req.body, ["role", "pseudo"])) {
     return res
       .status(400)
-      .json({ result: false, error: "Missing or empty fields." });
+      .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (currentRole !== "admin" && role === "admin") {
     return res.status(400).json({
@@ -464,7 +464,7 @@ exports.modifyPassword = async (req, res) => {
     return res.status(500).json({
       result: false,
       error:
-        "Please enter Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+        "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
     });
   }
   if (newPassword !== confirmPassword) {

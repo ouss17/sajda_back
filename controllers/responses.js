@@ -40,8 +40,8 @@ exports.addResponse = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error("Error during create:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      console.error("Erreur lors de la création :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
@@ -68,8 +68,8 @@ exports.retrieveOneResponse = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error during retrieve:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
   }
 };
 
@@ -92,8 +92,8 @@ exports.retrieveResponsesByUser = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error during retrieve:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
   }
 };
 
@@ -132,10 +132,10 @@ exports.modifyResponse = async (req, res) => {
             });
           }
         } catch (error) {
-          console.error("Error during update:", error);
+          console.error("Erreur lors de la mise à jour :", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -144,8 +144,8 @@ exports.modifyResponse = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error("Error during retrieve:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
@@ -182,10 +182,10 @@ exports.removeResponse = async (req, res) => {
             });
           }
         } catch (error) {
-          console.error("Error during delete:", error);
+          console.error("Erreur lors de la suppression :", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -194,8 +194,8 @@ exports.removeResponse = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error("Error during retrieve:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({

@@ -21,7 +21,7 @@ exports.addCategory = async (req, res) => {
   if (!checkBody(req.body, ["name", "urlName"])) {
     return res
       .status(400)
-      .json({ result: false, error: "Missing or empty fields." });
+      .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (role === "admin" || role === "gerant") {
     try {
@@ -39,7 +39,7 @@ exports.addCategory = async (req, res) => {
           console.error("Error during create:", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -49,7 +49,7 @@ exports.addCategory = async (req, res) => {
       }
     } catch (error) {
       console.error("Error during create:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
@@ -74,7 +74,7 @@ exports.retrieveCategories = async (req, res) => {
     }
   } catch (error) {
     console.error("Error during retrieve:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
   }
 };
 
@@ -91,7 +91,7 @@ exports.modifyCategory = async (req, res) => {
   if (!checkBody(req.body, ["name"])) {
     return res
       .status(400)
-      .json({ result: false, error: "Missing or empty fields." });
+      .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (role === "admin" || role === "gerant") {
     try {
@@ -114,7 +114,7 @@ exports.modifyCategory = async (req, res) => {
           console.error("Error during update:", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -124,7 +124,7 @@ exports.modifyCategory = async (req, res) => {
       }
     } catch (error) {
       console.error("Error during create:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
@@ -159,7 +159,7 @@ exports.removeCategory = async (req, res) => {
           console.error("Error during delete:", error);
           res
             .status(500)
-            .json({ result: false, error: "Internal server error." });
+            .json({ result: false, error: "Erreur interne du serveur." });
         }
       } else {
         res.status(400).json({
@@ -169,12 +169,12 @@ exports.removeCategory = async (req, res) => {
       }
     } catch (error) {
       console.error("Error during retrieve:", error);
-      res.status(500).json({ result: false, error: "Internal server error." });
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
     }
   } else {
     res.status(400).json({
       result: false,
-      error: "Vous n'avez pas les droits pour surrpimer une catégorie !",
+      error: "Vous n'avez pas les droits pour supprimer une catégorie !",
     });
   }
 };

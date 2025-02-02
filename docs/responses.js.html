@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: responses.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: responses.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { checkBody } = require("../modules/checkBody");
+const con = require("../models/connection_mysql");
+const {
+  createResponseFeedback,
+  updateResponseFeedback,
+  getOneResponseFeedback,
+  deleteResponseFeedback,
+  getAllResponseFeedbacksByUser,
+} = require("../modules/queries/responses_query");
+
+/**
+ * Create a feedback if user is authentified and at least imam
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
+exports.addResponse = async (req, res) => {
+  let { response, idFeedback, idUserWhoAsk } = req.body;
+  let { id, role } = req.user;
+  if (!checkBody(req.body, ["response", "idFeedback", "idUserWhoAsk"])) {
+    return res.status(400).json({
+      result: false,
+      error: "Vous n'avez pas rempli tous les champs.",
+    });
+  }
+
+  if (role == "admin" || role == "gerant" || role == "imam") {
+    try {
+      const feedback = await createResponseFeedback(con, [
+        response,
+        idFeedback,
+        idUserWhoAsk,
+        id,
+      ]);
+      if (feedback.affectedRows === 1) {
+        res.json({
+          result: true,
+          response: "Feedback créé",
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la création :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    }
+  } else {
+    res.status(400).json({
+      result: false,
+      error: "Vous n'avez pas les droits pour créer un feedback !",
+    });
+  }
+};
+
+/**
+ * Get all feedback if user is authentified
+ * @param {Object} req Unrequired
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
+exports.retrieveOneResponse = async (req, res) => {
+  try {
+    const feedback = await getOneResponseFeedback(con, [req.params.responseId]);
+    if (feedback) {
+      res.json({
+        result: true,
+        data: feedback[0],
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  }
+};
+
+/**
+ * Get a feedback by user if user is authentified
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
+exports.retrieveResponsesByUser = async (req, res) => {
+  try {
+    const feedback = await getAllResponseFeedbacksByUser(con, [
+      req.params.userId,
+    ]);
+    if (feedback) {
+      res.json({
+        result: true,
+        data: feedback,
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  }
+};
+
+/**
+ * Udate a feedback if user is authentified
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ */
+exports.modifyResponse = async (req, res) => {
+  let { response } = req.body;
+  let { id, role } = req.user;
+  if (!checkBody(req.body, ["response"])) {
+    return res.status(400).json({
+      result: false,
+      error: "Vous n'avez pas rempli tous les champs.",
+    });
+  }
+
+  if (role === "admin" || role === "gerant" || role === "imam") {
+    try {
+      const isExists = await getOneResponseFeedback(con, [
+        req.params.responseId,
+      ]);
+      if (isExists.length > 0) {
+        try {
+          const feedback = await updateResponseFeedback(con, [
+            response,
+            req.params.responseId,
+          ]);
+          if (feedback.affectedRows === 1) {
+            res.json({
+              result: true,
+              response: "Feedback modifié",
+            });
+          }
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour :", error);
+          res
+            .status(500)
+            .json({ result: false, error: "Erreur interne du serveur." });
+        }
+      } else {
+        res.status(400).json({
+          result: false,
+          error: "Ce Feedback n'existe pas",
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    }
+  } else {
+    res.status(400).json({
+      result: false,
+      error: "Vous n'avez pas les droits pour modifier un feedback !",
+    });
+  }
+};
+
+/**
+ * Remove a feedback if user is authentified
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
+exports.removeResponse = async (req, res) => {
+  let { role } = req.user;
+
+  if (role === "admin" || role === "gerant") {
+    try {
+      const isExists = await getOneResponseFeedback(con, [
+        req.params.responseId,
+      ]);
+      if (isExists.length > 0) {
+        try {
+          const feedback = await deleteResponseFeedback(con, [
+            req.params.responseId,
+          ]);
+          if (feedback.affectedRows === 1) {
+            res.json({
+              result: true,
+              response: "Feedback supprimé",
+            });
+          }
+        } catch (error) {
+          console.error("Erreur lors de la suppression :", error);
+          res
+            .status(500)
+            .json({ result: false, error: "Erreur interne du serveur." });
+        }
+      } else {
+        res.status(400).json({
+          result: false,
+          error: "Ce feedback n'existe pas",
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération :", error);
+      res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    }
+  } else {
+    res.status(400).json({
+      result: false,
+      error: "Vous n'avez pas les droits pour supprimer un feedback !",
+    });
+  }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCategory">addCategory</a></li><li><a href="global.html#addFeedback">addFeedback</a></li><li><a href="global.html#addMosquee">addMosquee</a></li><li><a href="global.html#addPost">addPost</a></li><li><a href="global.html#addResponse">addResponse</a></li><li><a href="global.html#getMe">getMe</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#modifyCategory">modifyCategory</a></li><li><a href="global.html#modifyFeedback">modifyFeedback</a></li><li><a href="global.html#modifyMosquee">modifyMosquee</a></li><li><a href="global.html#modifyPassword">modifyPassword</a></li><li><a href="global.html#modifyPost">modifyPost</a></li><li><a href="global.html#modifyResponse">modifyResponse</a></li><li><a href="global.html#modifyRole">modifyRole</a></li><li><a href="global.html#modifyUser">modifyUser</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeFeedback">removeFeedback</a></li><li><a href="global.html#removeMosquee">removeMosquee</a></li><li><a href="global.html#removePost">removePost</a></li><li><a href="global.html#removeResponse">removeResponse</a></li><li><a href="global.html#removeUser">removeUser</a></li><li><a href="global.html#retrieveAllAvailableMosquee">retrieveAllAvailableMosquee</a></li><li><a href="global.html#retrieveCategories">retrieveCategories</a></li><li><a href="global.html#retrieveCsv">retrieveCsv</a></li><li><a href="global.html#retrieveFeedbacksByMosquee">retrieveFeedbacksByMosquee</a></li><li><a href="global.html#retrieveFeedbacksByUser">retrieveFeedbacksByUser</a></li><li><a href="global.html#retrieveMosquee">retrieveMosquee</a></li><li><a href="global.html#retrieveOneFeedback">retrieveOneFeedback</a></li><li><a href="global.html#retrieveOnePost">retrieveOnePost</a></li><li><a href="global.html#retrieveOneResponse">retrieveOneResponse</a></li><li><a href="global.html#retrievePostsAvailable">retrievePostsAvailable</a></li><li><a href="global.html#retrievePostsByCategory">retrievePostsByCategory</a></li><li><a href="global.html#retrievePostsByMosquee">retrievePostsByMosquee</a></li><li><a href="global.html#retrieveResponsesByUser">retrieveResponsesByUser</a></li><li><a href="global.html#signin">signin</a></li><li><a href="global.html#signup">signup</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Feb 02 2025 20:36:52 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

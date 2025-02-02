@@ -15,8 +15,13 @@ var notificationsRouter = require("./routes/notifications");
 
 require("./models/connection");
 require("./models/connection_mysql");
-
+const cors = require("cors");
 var app = express();
+app.use(cors({
+    origin: "*",
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+}));
 
 app.use(logger("dev"));
 app.use(express.json());

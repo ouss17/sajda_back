@@ -19,10 +19,11 @@ const con = require("../models/connection_mysql");
 
 /**
  * Create a user if user is "admin"
- * @param {Object} req Object of the request
- * @param {Object} res Object of the response
- * @returns {Object} Object response
- * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ * @param {Object} req - The request object
+ * @param {Object} req.body - The request body
+ * @param {Object} res - The response object
+ * @returns {Object} - The response object
+ * @throws {Error} - If an error occurred in the database, if authentication failed, or if required fields are empty
  */
 exports.signup = async (req, res) => {
   const {
@@ -107,10 +108,10 @@ exports.signup = async (req, res) => {
 
 /**
  * Connect user to the database
- * @param {Object} req Object of the request
- * @param {Object} res Object of the response
- * @returns {Object} Object response with a token
- * @throws Exception if error occured in database, if authentification failed or required fields are empty
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {Object} - The response object with a token
+ * @throws {Error} - If an error occurred in the database, if authentication failed, or if required fields are empty
  */
 exports.signin = async (req, res) => {
   const { pseudo, password } = req.body;

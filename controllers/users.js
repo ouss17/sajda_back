@@ -184,6 +184,27 @@ exports.signin = async (req, res) => {
   }
 };
 
+exports.getUsers = async (req, res) => {
+  const { role } = req.user;
+  if (role === "admin" || role === "gerant") {
+    try {
+      const users = await getUsers(con, []);
+      res.json({
+        result: true,
+        data: users,
+      });
+    } catch (error) {
+      console.error("Error during retrieve:", error);
+      res.status(500).json({ result: false, error: "Internal server error." });
+    }
+  } else {
+    res.status(400).json({
+      result: false,
+      error: "Vous n'avez pas les droits pour récupérer les utilisateurs !",
+    });
+  }
+};
+
 /**
  * Get user authenticated infos
  * @param {Object} req Object of the request

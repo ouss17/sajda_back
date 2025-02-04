@@ -9,6 +9,7 @@ const {
   modifyPassword,
   modifyRole,
   getMe,
+  getUsers
 } = require("../controllers/users");
 var router = express.Router();
 
@@ -16,6 +17,7 @@ var router = express.Router();
 router.post("/signup", signup);
 router.post("/signin", signin);
 router.get("/getMe", auth, getMe);
+router.get("/", auth, getUsers);
 router.put("/update/:userId", auth, modifyUser);
 router.put("/updatePassword/:userId", auth, modifyPassword);
 router.put("/updateRole/:userId", auth, modifyRole);

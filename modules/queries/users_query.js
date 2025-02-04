@@ -30,6 +30,22 @@ const getUserByPseudoOrEmail = (con, values) => {
   });
 };
 
+const getUsers = (con, values) => {
+  return new Promise((resolve, reject) => {
+    let query = `
+    SELECT *
+    FROM users 
+    WHERE role != 'admin';
+    `;
+
+    // Executing the query
+    con.query(query, values, (err, rows) => {
+      if (err) reject(err);
+      resolve(rows);
+    });
+  });
+};
+
 const deleteUser = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
@@ -114,4 +130,5 @@ module.exports = {
   updateUser,
   updateRole,
   updatePassword,
+  getUsers
 };

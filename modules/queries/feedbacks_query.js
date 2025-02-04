@@ -30,6 +30,24 @@ const getAllFeedbacks = (con, values) => {
   });
 };
 
+const getAllFeedbacksByTarget = (con, values) => {
+  return new Promise((resolve, reject) => {
+    let query = `
+    SELECT *
+    FROM feedbacks
+    WHERE id_mosquee = ? AND target = ?
+    ORDER BY created_at DESC;
+    `;
+
+    // Executing the query
+    con.query(query, values, (err, rows) => {
+      if (err) reject(err);
+      resolve(rows);
+    });
+  });
+};
+
+
 const getOneFeedback = (con, values) => {
   return new Promise((resolve, reject) => {
     let query = `
@@ -120,4 +138,5 @@ module.exports = {
   deleteFeedback,
   getAllFeedbacksByMosquee,
   getAllFeedbacksByUser,
+  getAllFeedbacksByTarget
 };

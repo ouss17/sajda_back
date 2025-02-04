@@ -7,6 +7,7 @@ const {
   deleteFeedback,
   getAllFeedbacksByMosquee,
   getAllFeedbacksByUser,
+  getAllFeedbacksByRole,
 } = require("../modules/queries/feedbacks_query");
 
 /**
@@ -97,6 +98,22 @@ exports.retrieveFeedbacksByMosquee = async (req, res) => {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
   }
+};
+
+retrieveFeedbacksByTarget = async (req, res) => {
+  try {
+    const feedback = await getAllFeedbacksByTarget(con, [req.params.mosqueeId, req.params.target]);
+    if (feedback) {
+      res.json({
+        result: true,
+        data: feedback,
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  }
+
 };
 
 /**

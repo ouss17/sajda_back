@@ -100,7 +100,7 @@ exports.retrieveFeedbacksByMosquee = async (req, res) => {
   }
 };
 
-retrieveFeedbacksByTarget = async (req, res) => {
+exports.retrieveFeedbacksByTarget = async (req, res) => {
   try {
     const feedback = await getAllFeedbacksByTarget(con, [req.params.mosqueeId, req.params.target]);
     if (feedback) {

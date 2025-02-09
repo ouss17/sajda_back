@@ -22,10 +22,10 @@ const getConnection = async () => {
   return pool.getConnection();
 };
 
-getConnection().then((connection) => {
-  console.log('✅ Mysql Database connected');
-  connection.release();
-});
+// getConnection().then((connection) => {
+//   console.log('✅ Mysql Database connected');
+//   connection.release();
+// });
 
 module.exports = {
   getConnection

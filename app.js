@@ -14,7 +14,6 @@ var responsesRouter = require("./routes/responses");
 var notificationsRouter = require("./routes/notifications");
 
 require("./models/connection");
-require("./models/connection_mysql");
 const cors = require("cors");
 var app = express();
 app.use(cors({

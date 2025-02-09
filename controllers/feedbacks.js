@@ -1,5 +1,5 @@
 const { checkBody } = require("../modules/checkBody");
-const con = require("../models/connection_mysql");
+const { getConnection } = require("../models/connection_mysql");
 const {
   createFeedback,
   updateFeedback,
@@ -7,7 +7,7 @@ const {
   deleteFeedback,
   getAllFeedbacksByMosquee,
   getAllFeedbacksByUser,
-  getAllFeedbacksByRole,
+  getAllFeedbacksByTarget,
 } = require("../modules/queries/feedbacks_query");
 
 /**
@@ -28,7 +28,9 @@ exports.addFeedback = async (req, res) => {
   }
 
   if (role !== null && role !== undefined && role !== "") {
+    let con;
     try {
+      con = await getConnection();
       const feedback = await createFeedback(con, [
         title,
         detail,
@@ -45,6 +47,8 @@ exports.addFeedback = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la création :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -62,7 +66,9 @@ exports.addFeedback = async (req, res) => {
  * @throws Exception if error occured in database, if authentification failed
  */
 exports.retrieveOneFeedback = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const feedback = await getOneFeedback(con, [req.params.feedbackId]);
     if (feedback) {
       res.json({
@@ -73,6 +79,8 @@ exports.retrieveOneFeedback = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -84,7 +92,9 @@ exports.retrieveOneFeedback = async (req, res) => {
  * @throws Exception if error occured in database, if authentification failed
  */
 exports.retrieveFeedbacksByMosquee = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const feedback = await getAllFeedbacksByMosquee(con, [
       req.params.mosqueeId,
     ]);
@@ -97,11 +107,15 @@ exports.retrieveFeedbacksByMosquee = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
 exports.retrieveFeedbacksByTarget = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const feedback = await getAllFeedbacksByTarget(con, [req.params.mosqueeId, req.params.target]);
     if (feedback) {
       res.json({
@@ -112,8 +126,9 @@ exports.retrieveFeedbacksByTarget = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
-
 };
 
 /**
@@ -124,7 +139,9 @@ exports.retrieveFeedbacksByTarget = async (req, res) => {
  * @throws Exception if error occured in database, if authentification failed
  */
 exports.retrieveFeedbacksByUser = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const feedback = await getAllFeedbacksByUser(con, [req.params.userId]);
     if (feedback) {
       res.json({
@@ -135,6 +152,8 @@ exports.retrieveFeedbacksByUser = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -156,7 +175,9 @@ exports.modifyFeedback = async (req, res) => {
   }
 
   if (role === "admin" || role === "gerant" || role === "imam") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneFeedback(con, [req.params.feedbackId]);
       if (isExists.length > 0) {
         try {
@@ -186,6 +207,8 @@ exports.modifyFeedback = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -206,7 +229,9 @@ exports.removeFeedback = async (req, res) => {
   let { role } = req.user;
 
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneFeedback(con, [req.params.feedbackId]);
       if (isExists.length > 0) {
         try {
@@ -232,6 +257,8 @@ exports.removeFeedback = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({

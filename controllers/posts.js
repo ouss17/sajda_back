@@ -1,5 +1,5 @@
 const { checkBody } = require("../modules/checkBody");
-const con = require("../models/connection_mysql");
+const { getConnection } = require('../models/connection_mysql');
 const {
   createPost,
   getAllPostsByMosquee,
@@ -28,7 +28,9 @@ exports.addPost = async (req, res) => {
   }
 
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const post = await createPost(con, [
         title,
         content,
@@ -46,6 +48,8 @@ exports.addPost = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la création :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -63,7 +67,9 @@ exports.addPost = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrievePostsByMosquee = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const posts = await getAllPostsByMosquee(con, req.params.mosqueeId);
     if (posts) {
       res.json({
@@ -74,6 +80,8 @@ exports.retrievePostsByMosquee = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -85,7 +93,9 @@ exports.retrievePostsByMosquee = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrieveOnePost = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const post = await getOnePost(con, req.params.postId);
     if (post.length > 0) {
       res.json({
@@ -98,6 +108,8 @@ exports.retrieveOnePost = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -109,7 +121,9 @@ exports.retrieveOnePost = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrievePostsByCategory = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const posts = await getAllPostsByCategorie(con, [
       req.params.categoryId,
       req.params.mosqueeId,
@@ -123,6 +137,8 @@ exports.retrievePostsByCategory = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -134,7 +150,9 @@ exports.retrievePostsByCategory = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrievePostsAvailable = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const posts = await getAllPostsAvailable(con);
     if (posts) {
       res.json({
@@ -145,6 +163,8 @@ exports.retrievePostsAvailable = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -166,7 +186,9 @@ exports.modifyPost = async (req, res) => {
   }
 
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOnePost(con, [req.params.postId]);
       if (isExists.length > 0) {
         try {
@@ -213,6 +235,8 @@ exports.modifyPost = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -233,7 +257,9 @@ exports.removePost = async (req, res) => {
   let { role } = req.user;
 
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOnePost(con, [req.params.postId]);
       if (isExists.length > 0) {
         try {
@@ -259,6 +285,8 @@ exports.removePost = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({

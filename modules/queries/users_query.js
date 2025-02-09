@@ -1,126 +1,140 @@
-const createUser = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    INSERT INTO users 
-    (pseudo, email, password, firstname, lastname, birthDate, external_id) 
-    VALUES (?);
-    `;
+const createUser = async (con, values) => {
+  let query = `
+  INSERT INTO users 
+  (pseudo, email, password, firstname, lastname, birthDate, external_id) 
+  VALUES (?);
+  `;
 
-    // Executing the query
-    con.query(query, [values], (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, [values]);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getUserByPseudoOrEmail = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM users 
-    WHERE email = ? OR pseudo = ?;
-    `;
+const getUserByPseudoOrEmail = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM users 
+  WHERE email = ? OR pseudo = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getUsers = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM users 
-    WHERE role != 'admin';
-    `;
+const getUsers = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM users 
+  WHERE role != 'admin';
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const deleteUser = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    DELETE
-    FROM users 
-    WHERE id = ?;
-    `;
+const deleteUser = async (con, values) => {
+  let query = `
+  DELETE
+  FROM users 
+  WHERE id = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const updateUser = (con, values, currentPseudo, pseudo) => {
-  return new Promise((resolve, reject) => {
-    let query = "";
-    switch (true) {
-      case currentPseudo == pseudo:
-        query = `
-    UPDATE users 
-    SET firstname = ?, lastname = ?, birthDate = ?
-    WHERE id = ?;
-    `;
-        break;
+const updateUser = async (con, values, currentPseudo, pseudo) => {
+  let query = "";
+  switch (true) {
+    case currentPseudo == pseudo:
+      query = `
+  UPDATE users 
+  SET firstname = ?, lastname = ?, birthDate = ?
+  WHERE id = ?;
+  `;
+      break;
 
-      default:
-        query = `
-        UPDATE users 
-        SET pseudo = ?, firstname = ?, lastname = ?, birthDate = ?
-        WHERE id = ?;
-        `;
-        break;
-    }
+    default:
+      query = `
+      UPDATE users 
+      SET pseudo = ?, firstname = ?, lastname = ?, birthDate = ?
+      WHERE id = ?;
+      `;
+      break;
+  }
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const updateRole = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    UPDATE users 
-    SET role = ?
-    WHERE id = ?;
-    `;
+const updateRole = async (con, values) => {
+  let query = `
+  UPDATE users 
+  SET role = ?
+  WHERE id = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const updatePassword = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    UPDATE users 
-    SET password = ?
-    WHERE id = ?;
-    `;
+const updatePassword = async (con, values) => {
+  let query = `
+  UPDATE users 
+  SET password = ?
+  WHERE id = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 module.exports = {

@@ -1,5 +1,5 @@
 const { checkBody } = require("../modules/checkBody");
-const con = require("../models/connection_mysql");
+const { getConnection } = require('../models/connection_mysql');
 const {
   createCategory,
   getAllCategories,
@@ -24,7 +24,9 @@ exports.addCategory = async (req, res) => {
       .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneCategory(con, [urlName]);
       if (isExists.length === 0) {
         try {
@@ -50,6 +52,8 @@ exports.addCategory = async (req, res) => {
     } catch (error) {
       console.error("Error during create:", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -67,7 +71,9 @@ exports.addCategory = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrieveCategories = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const categories = await getAllCategories(con);
     if (categories) {
       res.json({ result: true, data: categories });
@@ -75,6 +81,8 @@ exports.retrieveCategories = async (req, res) => {
   } catch (error) {
     console.error("Error during retrieve:", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -94,7 +102,9 @@ exports.modifyCategory = async (req, res) => {
       .json({ result: false, error: "Champs manquants ou vides." });
   }
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneCategory(con, [urlName]);
       if (isExists.length === 0 || req.params.urlCategory === urlName) {
         try {
@@ -125,6 +135,8 @@ exports.modifyCategory = async (req, res) => {
     } catch (error) {
       console.error("Error during create:", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -144,7 +156,9 @@ exports.modifyCategory = async (req, res) => {
 exports.removeCategory = async (req, res) => {
   const { role } = req.user;
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneCategory(con, req.params.urlCategory);
       if (isExists.length > 0) {
         try {
@@ -170,6 +184,8 @@ exports.removeCategory = async (req, res) => {
     } catch (error) {
       console.error("Error during retrieve:", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({

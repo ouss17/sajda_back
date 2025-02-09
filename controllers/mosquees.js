@@ -3,7 +3,7 @@ const path = require("path");
 const readline = require("readline");
 
 const { checkBody } = require("../modules/checkBody");
-const con = require("../models/connection_mysql");
+const { getConnection } = require('../models/connection_mysql');
 const { isValidDateFormat } = require("../modules/checkFieldRegex");
 const {
   getOneMosqueeByLocation,
@@ -69,7 +69,9 @@ exports.addMosquee = async (req, res) => {
   }
 
   if (role === "admin") {
+  let con;
     try {
+      con = await getConnection();
       const isExists = await getOneMosqueeByLocation(con, [
         name,
         address,
@@ -123,6 +125,11 @@ exports.addMosquee = async (req, res) => {
           res
             .status(500)
             .json({ result: false, error: "Erreur interne du serveur." });
+        }finally {
+          if (con) {
+            con.release();
+            console.log("Connection released");
+          }
         }
       } else {
         res.status(400).json({
@@ -150,7 +157,9 @@ exports.addMosquee = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrieveMosquee = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const mosquee = await getOneMosquee(con, req.params.mosqueeId);
     if (mosquee.length > 0) {
       res.json({
@@ -161,6 +170,11 @@ exports.retrieveMosquee = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
     res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+  }finally {
+    if (con) {
+      con.release();
+      console.log("Connection released");
+    }
   }
 };
 
@@ -172,17 +186,29 @@ exports.retrieveMosquee = async (req, res) => {
  * @throws Exception if error occured in database
  */
 exports.retrieveAllAvailableMosquee = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const mosquees = await getAllAvailableMosquees(con);
     if (mosquees.length > 0) {
       res.json({
         result: true,
         data: mosquees,
       });
+    }else{
+      res.json({
+        result: true,
+        data: [],
+      });
     }
   } catch (error) {
     console.error("Erreur lors de la récupération :", error);
-    res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    res.status(500).json({ result: false, error: "Erreur interne du serveur.", message : error });
+  }finally {
+    if (con) {
+      con.release();
+      console.log("Connection released");
+    }
   }
 };
 
@@ -238,7 +264,9 @@ exports.modifyMosquee = async (req, res) => {
   }
 
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneMosqueeByLocation(con, [
         name,
         address,
@@ -309,6 +337,11 @@ exports.modifyMosquee = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    }finally {
+      if (con) {
+        con.release();
+        console.log("Connection released");
+      }
     }
   } else {
     res.status(400).json({
@@ -328,7 +361,9 @@ exports.modifyMosquee = async (req, res) => {
 exports.removeMosquee = async (req, res) => {
   const { id, role } = req.user;
   if (role == "admin") {
+    let con;
     try {
+      con = await getConnection();
       const isExists = await getOneMosquee(con, req.params.mosqueeId);
       if (isExists.length > 0) {
         try {
@@ -354,6 +389,11 @@ exports.removeMosquee = async (req, res) => {
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
       res.status(500).json({ result: false, error: "Erreur interne du serveur." });
+    }finally {
+      if (con) {
+        con.release();
+        console.log("Connection released");
+      }
     }
   } else {
     res.status(400).json({

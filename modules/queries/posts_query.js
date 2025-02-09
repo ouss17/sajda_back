@@ -1,132 +1,148 @@
-const createPost = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    INSERT INTO posts 
-    (title, content, media, id_mosquee, id_category, id_user) 
-    VALUES (?);
-    `;
+const createPost = async (con, values) => {
+  let query = `
+  INSERT INTO posts 
+  (title, content, media, id_mosquee, id_category, id_user) 
+  VALUES (?);
+  `;
 
-    // Executing the query
-    con.query(query, [values], (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, [values]);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getAllPosts = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM posts
-    ORDER BY created_at DESC;
-    `;
+const getAllPosts = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM posts
+  ORDER BY created_at DESC;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getOnePost = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM posts
-    WHERE id = ?;
-    `;
+const getOnePost = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM posts
+  WHERE id = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getAllPostsByMosquee = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM posts
-    WHERE id_mosquee = ?
-    ORDER BY created_at DESC;
-    `;
+const getAllPostsByMosquee = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM posts
+  WHERE id_mosquee = ?
+  ORDER BY created_at DESC;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getAllPostsAvailable = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM posts
-    WHERE active = 1
-    ORDER BY created_at DESC;
-    `;
+const getAllPostsAvailable = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM posts
+  WHERE active = 1
+  ORDER BY created_at DESC;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const getAllPostsByCategorie = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM posts
-    WHERE id_category = ? AND id_mosquee = ? AND active = 1
-    ORDER BY created_at DESC;
-    `;
+const getAllPostsByCategorie = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM posts
+  WHERE id_category = ? AND id_mosquee = ? AND active = 1
+  ORDER BY created_at DESC;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const updatePost = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    UPDATE posts 
-    SET  title = ?, content = ?, media = ?, updated_at = ?, active = ?, id_category = ?, id_user = ?
-    WHERE id = ?;
-    `;
+const updatePost = async (con, values) => {
+  let query = `
+  UPDATE posts 
+  SET  title = ?, content = ?, media = ?, updated_at = ?, active = ?, id_category = ?, id_user = ?
+  WHERE id = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
-const deletePost = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    DELETE
-    FROM posts 
-    WHERE id = ?;
-    `;
+const deletePost = async (con, values) => {
+  let query = `
+  DELETE
+  FROM posts 
+  WHERE id = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 module.exports = {

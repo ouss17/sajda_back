@@ -13,9 +13,10 @@ const {
   updateUser,
   updateRole,
   updatePassword,
+  getUsers
 } = require("../modules/queries/users_query");
 const JWT_SECRET = process.env.JWT_SECRET;
-const con = require("../models/connection_mysql");
+const { getConnection } = require('../models/connection_mysql');
 
 /**
  * Create a user if user is "admin"
@@ -69,7 +70,9 @@ exports.signup = async (req, res) => {
       .json({ result: false, error: "La date entrée est incorrecte." });
   }
 
+  let con;
   try {
+    con = await getConnection();
     const user = await getUserByPseudoOrEmail(con, [email, pseudo]);
 
     if (user.length === 0) {
@@ -103,6 +106,8 @@ exports.signup = async (req, res) => {
   } catch (error) {
     console.error("Error during signup:", error);
     res.status(500).json({ result: false, error: "Internal server error." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -128,7 +133,9 @@ exports.signin = async (req, res) => {
         "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
     });
   }
+  let con;
   try {
+    con = await getConnection();
     const user = await getUserByPseudoOrEmail(con, [pseudo, pseudo]);
 
     if (user.length > 0) {
@@ -181,13 +188,17 @@ exports.signin = async (req, res) => {
   } catch (error) {
     console.error("Error during signin:", error);
     res.status(500).json({ result: false, error: "Internal server error." });
+  } finally {
+    if (con) con.release();
   }
 };
 
-exports.getUsers = async (req, res) => {
+exports.retrieveUsers = async (req, res) => {
   const { role } = req.user;
   if (role === "admin" || role === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const users = await getUsers(con, []);
       res.json({
         result: true,
@@ -196,6 +207,8 @@ exports.getUsers = async (req, res) => {
     } catch (error) {
       console.error("Error during retrieve:", error);
       res.status(500).json({ result: false, error: "Internal server error." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -213,7 +226,9 @@ exports.getUsers = async (req, res) => {
  * @throws Exception if error occured in database, if authentification failed
  */
 exports.getMe = async (req, res) => {
+  let con;
   try {
+    con = await getConnection();
     const user = await getUserByPseudoOrEmail(con, [
       req.user.pseudo,
       req.user.pseudo,
@@ -239,6 +254,8 @@ exports.getMe = async (req, res) => {
   } catch (error) {
     console.error("Error during retrieve:", error);
     res.status(500).json({ result: false, error: "Internal server error." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -267,7 +284,9 @@ exports.modifyUser = async (req, res) => {
       .status(400)
       .json({ result: false, error: "La date entrée est incorrecte." });
   }
+  let con;
   try {
+    con = await getConnection();
     const user = await getUserByPseudoOrEmail(con, [pseudo, pseudo]);
 
     if (currentPseudo == pseudo) {
@@ -371,6 +390,8 @@ exports.modifyUser = async (req, res) => {
   } catch (error) {
     console.error("Error during update:", error);
     res.status(500).json({ result: false, error: "Internal server error." });
+  } finally {
+    if (con) con.release();
   }
 };
 
@@ -402,7 +423,9 @@ exports.modifyRole = async (req, res) => {
     });
   }
   if (currentRole === "admin" || currentRole === "gerant") {
+    let con;
     try {
+      con = await getConnection();
       const user = await getUserByPseudoOrEmail(con, [pseudo, pseudo]);
       if (user.length > 0) {
         try {
@@ -453,6 +476,8 @@ exports.modifyRole = async (req, res) => {
     } catch (error) {
       console.error("Error during update:", error);
       res.status(500).json({ result: false, error: "Internal server error." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -504,7 +529,9 @@ exports.modifyPassword = async (req, res) => {
   }
 
   if (currentId == req.params.userId) {
+    let con;
     try {
+      con = await getConnection();
       const user = await getUserByPseudoOrEmail(con, [
         currentPseudo,
         currentPseudo,
@@ -543,6 +570,8 @@ exports.modifyPassword = async (req, res) => {
     } catch (error) {
       console.error("Error during update:", error);
       res.status(500).json({ result: false, error: "Internal server error." });
+    } finally {
+      if (con) con.release();
     }
   } else {
     res.status(400).json({
@@ -562,7 +591,9 @@ exports.modifyPassword = async (req, res) => {
 exports.removeUser = async (req, res) => {
   const { id, email, role } = req.user;
 
+  let con;
   try {
+    con = await getConnection();
     const user = await getUserByPseudoOrEmail(con, [email, email]);
 
     if (user.length > 0) {
@@ -606,6 +637,8 @@ exports.removeUser = async (req, res) => {
   } catch (error) {
     console.error("Error during delete:", error);
     res.status(500).json({ result: false, error: "Internal server error." });
+  } finally {
+    if (con) con.release();
   }
 };
 

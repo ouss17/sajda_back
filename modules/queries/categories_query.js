@@ -5,20 +5,22 @@
  * @returns object of query
  * @see addCategory
  */
-const createCategory = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    INSERT INTO categories 
-    (name, comment, url_name) 
-    VALUES (?);
-    `;
+const createCategory = async (con, values) => {
+  let query = `
+  INSERT INTO categories 
+  (name, comment, url_name) 
+  VALUES (?);
+  `;
 
-    // Executing the query
-    con.query(query, [values], (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, [values]);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 /**
@@ -28,19 +30,21 @@ const createCategory = (con, values) => {
  * @returns object of query
  * @see retrieveCategories
  */
-const getAllCategories = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM categories;
-    `;
+const getAllCategories = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM categories;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 /**
@@ -50,20 +54,22 @@ const getAllCategories = (con, values) => {
  * @returns object of query
  * @author Ousmane
  */
-const getOneCategory = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    SELECT *
-    FROM categories
-    WHERE url_name = ?;
-    `;
+const getOneCategory = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM categories
+  WHERE url_name = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 /**
@@ -72,20 +78,22 @@ const getOneCategory = (con, values) => {
  * @param {Array} values Array of values
  * @returns object of query
  */
-const updateCategory = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    UPDATE categories 
-    SET  name = ?, comment = ?, url_name = ?
-    WHERE url_name = ?;
-    `;
+const updateCategory = async (con, values) => {
+  let query = `
+  UPDATE categories 
+  SET  name = ?, comment = ?, url_name = ?
+  WHERE url_name = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 /**
@@ -94,20 +102,22 @@ const updateCategory = (con, values) => {
  * @param {Array} values Array of values
  * @returns object of query
  */
-const deleteCategory = (con, values) => {
-  return new Promise((resolve, reject) => {
-    let query = `
-    DELETE
-    FROM categories 
-    WHERE url_name = ?;
-    `;
+const deleteCategory = async (con, values) => {
+  let query = `
+  DELETE
+  FROM categories 
+  WHERE url_name = ?;
+  `;
 
-    // Executing the query
-    con.query(query, values, (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows;
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
 };
 
 module.exports = {

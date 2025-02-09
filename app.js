@@ -38,4 +38,7 @@ app.use("/feedbacks", feedbacksRouter);
 app.use("/responses", responsesRouter);
 app.use("/notifications", notificationsRouter);
 
+console.log("Server started");
+
+
 module.exports = app;

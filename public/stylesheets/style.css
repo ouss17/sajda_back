@@ -1,8 +1,56 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f06, #4a90e2);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 a {
   color: #00B7FF;
+}
+
+.container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.header .title {
+  font-size: 3em;
+  margin: 0;
+}
+
+.main-content .welcome-text {
+  font-size: 1.5em;
+  margin: 20px 0;
+}
+
+.main-content .summary-text {
+  font-size: 1.2em;
+  margin: 20px 0;
+}
+
+.discover-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background: #4a90e2;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.discover-button:hover {
+  background: #357ab8;
+}
+
+.footer p {
+  margin: 20px 0 0;
+  font-size: 0.8em;
 }

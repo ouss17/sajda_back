@@ -1,11 +1,11 @@
 const mysql = require('mysql2/promise');
 
-const mariadb = require('mariadb');
+// const mariadb = require('mariadb');
 
 let pool;
 
 const createPool = () => {
-  pool = mariadb.createPool({
+  pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,

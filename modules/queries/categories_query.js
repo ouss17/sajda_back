@@ -16,7 +16,7 @@ const createCategory = async (con, values) => {
   try {
     const rows = await con.query(query, [values]);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -40,7 +40,7 @@ const getAllCategories = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -65,7 +65,7 @@ const getOneCategory = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -89,7 +89,7 @@ const updateCategory = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -113,7 +113,7 @@ const deleteCategory = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;

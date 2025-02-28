@@ -9,7 +9,7 @@ const createPost = async (con, values) => {
   try {
     const rows = await con.query(query, [values]);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -27,7 +27,7 @@ const getAllPosts = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -45,7 +45,7 @@ const getOnePost = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -64,7 +64,7 @@ const getAllPostsByMosquee = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -83,7 +83,7 @@ const getAllPostsAvailable = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -102,7 +102,7 @@ const getAllPostsByCategorie = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -120,7 +120,7 @@ const updatePost = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -138,7 +138,7 @@ const deletePost = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;

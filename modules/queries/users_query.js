@@ -9,7 +9,7 @@ const createUser = async (con, values) => {
   try {
     const rows = await con.query(query, [values]);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -27,7 +27,9 @@ const getUserByPseudoOrEmail = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    console.log(rows[0]);
+    
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -45,7 +47,7 @@ const getUsers = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -63,7 +65,7 @@ const deleteUser = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -94,7 +96,7 @@ const updateUser = async (con, values, currentPseudo, pseudo) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -112,7 +114,7 @@ const updateRole = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -130,7 +132,7 @@ const updatePassword = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;

@@ -9,7 +9,7 @@ const createFeedback = async (con, values) => {
   try {
     const rows = await con.query(query, [values]);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -27,7 +27,7 @@ const getAllFeedbacks = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -46,7 +46,7 @@ const getAllFeedbacksByTarget = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -64,7 +64,7 @@ const getOneFeedback = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -83,7 +83,7 @@ const getAllFeedbacksByMosquee = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -102,7 +102,7 @@ const getAllFeedbacksByUser = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -120,7 +120,7 @@ const updateFeedback = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -138,7 +138,7 @@ const deleteFeedback = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;

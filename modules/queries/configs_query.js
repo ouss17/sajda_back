@@ -9,7 +9,7 @@ const createMosqueeConfig = async (con, values) => {
   try {
     const rows = await con.query(query, [values]);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -27,7 +27,7 @@ const getOneMosqueeConfigByMosquee = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
@@ -45,7 +45,7 @@ const updateMosqueeConfig = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     console.log("Query success, rows:", rows?.length);
-    return rows;
+    return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;

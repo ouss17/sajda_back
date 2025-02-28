@@ -60,7 +60,10 @@ exports.signup = async (req, res) => {
     return res.status(500).json({
       result: false,
       error:
-        "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
+        `Veuillez écrire un mot de passe qui correspond à une de ces conditions :
+        - 12 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial.
+        - 14 caractères, 1 majuscule, 1 minuscule, 1 chiffre.
+        - 7 mots séparés par un espace.`,
     });
   }
 
@@ -130,7 +133,10 @@ exports.signin = async (req, res) => {
     return res.status(500).json({
       result: false,
       error:
-        "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
+      `Veuillez écrire un mot de passe qui correspond à une de ces conditions :
+      - 12 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial.
+      - 14 caractères, 1 majuscule, 1 minuscule, 1 chiffre.
+      - 7 mots séparés par un espace.`,
     });
   }
   let con;
@@ -510,7 +516,10 @@ exports.modifyPassword = async (req, res) => {
     return res.status(500).json({
       result: false,
       error:
-        "Veuillez entrer au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
+      `Veuillez écrire un mot de passe qui correspond à une de ces conditions :
+      - 12 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial.
+      - 14 caractères, 1 majuscule, 1 minuscule, 1 chiffre.
+      - 7 mots séparés par un espace.`,
     });
   }
   if (newPassword !== confirmPassword) {

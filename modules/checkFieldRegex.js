@@ -37,10 +37,15 @@ const isValidEmail = (email) => {
  * @see addUser
  */
 const isValidPassword = (password) => {
-  const passwordRegexValidation =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegexValidationTwelve =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
 
-  if (!passwordRegexValidation.test(password)) {
+  const passwordRegexValidationFourteen =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{14,}$/;
+
+  const passwordRegexValidationSeven = /^(?:\S+\s+){6,}\S+$/;
+
+  if (!passwordRegexValidationTwelve.test(password) && !passwordRegexValidationFourteen.test(password) && !passwordRegexValidationSeven.test(password)) {
     return false;
   }
   return true;

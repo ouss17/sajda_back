@@ -2,6 +2,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const csurf = require('csurf');
 require("dotenv").config();
 
 var indexRouter = require("./routes/index");
@@ -14,8 +15,21 @@ var responsesRouter = require("./routes/responses");
 var notificationsRouter = require("./routes/notifications");
 
 require("./models/connection");
-const cors = require("cors");
+
+// Ajouter <input type="hidden" name="_csrf" value="${res.locals.csrfToken}"> dans les formulaires
+
 var app = express();
+
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
+
+app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
+const cors = require("cors");
+
 app.use(cors({
     origin: "*",
     credentials: true,

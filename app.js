@@ -3,6 +3,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const csurf = require('csurf');
+const rateLimit = require('express-rate-limit');
 require("dotenv").config();
 
 var indexRouter = require("./routes/index");
@@ -19,6 +20,12 @@ require("./models/connection");
 // Ajouter <input type="hidden" name="_csrf" value="${res.locals.csrfToken}"> dans les formulaires
 
 var app = express();
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // Limite chaque IP à 100 requêtes par fenêtre de 15 minutes
+});
+app.use(limiter);
 
 const csrfProtection = csurf({ cookie: true });
 app.use(csrfProtection);

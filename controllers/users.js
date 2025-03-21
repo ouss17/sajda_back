@@ -57,7 +57,7 @@ exports.signup = async (req, res) => {
       .json({ result: false, error: "Veuillez entrer un email valide." });
   }
   if (!isValidPassword(password)) {
-    return res.status(500).json({
+    return res.status(400).json({
       result: false,
       error:
         `Veuillez écrire un mot de passe qui correspond à une de ces conditions :
@@ -100,7 +100,7 @@ exports.signup = async (req, res) => {
         console.error("Error during signup:", error);
         res
           .status(500)
-          .json({ result: false, error: "Internal server error." });
+          .json({ result: false, error: "Internal server error during fetch." });
       }
     } else {
       // User already exists in database
@@ -108,7 +108,7 @@ exports.signup = async (req, res) => {
     }
   } catch (error) {
     console.error("Error during signup:", error);
-    res.status(500).json({ result: false, error: "Internal server error." });
+    res.status(500).json({ result: false, error: "Internal server error during create." });
   } finally {
     if (con) con.release();
   }

@@ -21,6 +21,9 @@ require("./models/connection");
 
 var app = express();
 
+app.use(cookieParser());
+
+
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // Limite chaque IP à 100 requêtes par fenêtre de 15 minutes
@@ -35,6 +38,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/api/csrf-token', (req, res) => {
+    res.json({ csrfToken: req.csrfToken() });
+});
+
 const cors = require("cors");
 
 app.use(cors({
@@ -46,7 +53,6 @@ app.use(cors({
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);

@@ -7,7 +7,7 @@ const rateLimit = require('express-rate-limit');
 require("dotenv").config();
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var usersRouter = require("./routes/usersRoute");
 var mosqueesRouter = require("./routes/mosquees");
 var categoriesRouter = require("./routes/categories");
 var postsRouter = require("./routes/posts");

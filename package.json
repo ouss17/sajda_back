@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "docs": "jsdoc app.js routes controllers --destination docs",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

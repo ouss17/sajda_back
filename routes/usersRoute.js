@@ -10,7 +10,7 @@ const {
   modifyRole,
   getMe,
   retrieveUsers,
-} = require("../controllers/users");
+} = require("../controllers/usersController");
 var router = express.Router();
 
 /* GET users listing. */

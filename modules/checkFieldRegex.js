@@ -37,12 +37,17 @@ const isValidEmail = (email) => {
  * @see addUser
  */
 const isValidPassword = (password) => {
+
+  // At least 12 characters one uppercase letter, one lowercase letter, one number and one special character
   const passwordRegexValidationTwelve =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
 
+  // At least 14 characters with one uppercase letter, one lowercase letter and one number
   const passwordRegexValidationFourteen =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{14,}$/;
 
+
+  // At least 7 words with one space between them
   const passwordRegexValidationSeven = /^(?:\S+\s+){6,}\S+$/;
 
   if (!passwordRegexValidationTwelve.test(password) && !passwordRegexValidationFourteen.test(password) && !passwordRegexValidationSeven.test(password)) {

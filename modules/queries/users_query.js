@@ -8,7 +8,7 @@ const createUser = async (con, values) => {
   // Executing the query
   try {
     const rows = await con.query(query, [values]);
-    console.log("Query success, rows:", rows?.length);
+    // // console.log("Query success, rows:", rows?.length);
     return rows[0];
   } catch (err) {
     console.error("Query error:", err);
@@ -26,7 +26,7 @@ const getUserByPseudoOrEmail = async (con, values) => {
   // Executing the query
   try {
     const rows = await con.query(query, values);
-    console.log("Query success, rows:", rows?.length);
+    // console.log("Query success, rows:", rows?.length);
     console.log(rows[0]);
     
     return rows[0];
@@ -46,7 +46,7 @@ const getUsers = async (con, values) => {
   // Executing the query
   try {
     const rows = await con.query(query, values);
-    console.log("Query success, rows:", rows?.length);
+    // console.log("Query success, rows:", rows?.length);
     return rows[0];
   } catch (err) {
     console.error("Query error:", err);
@@ -64,7 +64,7 @@ const deleteUser = async (con, values) => {
   // Executing the query
   try {
     const rows = await con.query(query, values);
-    console.log("Query success, rows:", rows?.length);
+    // console.log("Query success, rows:", rows?.length);
     return rows[0];
   } catch (err) {
     console.error("Query error:", err);
@@ -95,7 +95,7 @@ const updateUser = async (con, values, currentPseudo, pseudo) => {
   // Executing the query
   try {
     const rows = await con.query(query, values);
-    console.log("Query success, rows:", rows?.length);
+    // console.log("Query success, rows:", rows?.length);
     return rows[0];
   } catch (err) {
     console.error("Query error:", err);
@@ -113,7 +113,7 @@ const updateRole = async (con, values) => {
   // Executing the query
   try {
     const rows = await con.query(query, values);
-    console.log("Query success, rows:", rows?.length);
+    // console.log("Query success, rows:", rows?.length);
     return rows[0];
   } catch (err) {
     console.error("Query error:", err);
@@ -131,13 +131,31 @@ const updatePassword = async (con, values) => {
   // Executing the query
   try {
     const rows = await con.query(query, values);
-    console.log("Query success, rows:", rows?.length);
+    // console.log("Query success, rows:", rows?.length);
     return rows[0];
   } catch (err) {
     console.error("Query error:", err);
     throw err;
   }
 };
+
+const updateExternal = async (con, values) => {
+  let query = `
+  UPDATE users 
+  SET external_id = ?
+  WHERE id = ?;
+  `;
+
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    // console.log("Query success, rows:", rows?.length);
+    return rows[0];
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
+}
 
 module.exports = {
   createUser,
@@ -146,5 +164,6 @@ module.exports = {
   updateUser,
   updateRole,
   updatePassword,
-  getUsers
+  getUsers,
+  updateExternal
 };

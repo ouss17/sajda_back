@@ -72,6 +72,24 @@ const getOneCategory = async (con, values) => {
   }
 };
 
+const getCategoryById = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM categories
+  WHERE id = ?;
+  `;
+
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    console.log("Query success, rows:", rows?.length);
+    return rows[0];
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
+};
+
 /**
  * Update a category in database
  * @param {Object} con Database connection object
@@ -123,6 +141,7 @@ const deleteCategory = async (con, values) => {
 module.exports = {
   createCategory,
   getAllCategories,
+  getCategoryById,
   getOneCategory,
   updateCategory,
   deleteCategory,

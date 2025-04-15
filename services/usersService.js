@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { getConnection } = require("../models/connection_mysql");
 const {
   getUserByPseudoOrEmail,
+  getUserById,
   createUser,
   deleteUser,
   updateUser,
@@ -172,6 +173,15 @@ exports.updateUser = async (userId, currentPseudo, userData) => {
 
   const con = await getConnection();
   try {
+    // Vérifie si l'utilisateur existe
+    const existingUser = await getUserById(con, userId);
+    
+    if (existingUser.length === 0) {
+      console.log("existingUser", existingUser);
+      
+      throw new Error("Utilisateur introuvable.");
+    }
+    
     const result = await updateUser(con, [pseudo, firstname, lastname, birthDate, userId], currentPseudo, pseudo);
     return result;
   } finally {
@@ -187,6 +197,13 @@ exports.updateUserRole = async (userId, role) => {
 
   const con = await getConnection();
   try {
+    // Vérifie si l'utilisateur existe
+    const existingUser = await getUserById(con, userId);
+    if (existingUser.length === 0) {
+      throw new Error("Utilisateur introuvable.");
+    }
+
+
     const result = await updateRole(con, [role, userId]);
     return result;
   } finally {
@@ -205,6 +222,12 @@ exports.updateUserPassword = async (userId, newPassword) => {
 
   const con = await getConnection();
   try {
+    // Vérifie si l'utilisateur existe
+    const existingUser = await getUserById(con, userId);
+    if (existingUser.length === 0) {
+      throw new Error("Utilisateur introuvable.");
+    }
+
     const hash = await bcrypt.hash(newPassword, 10);
     const result = await updatePassword(con, [hash, userId]);
     return result;
@@ -217,6 +240,12 @@ exports.updateUserPassword = async (userId, newPassword) => {
 exports.deleteUser = async (userId) => {
   const con = await getConnection();
   try {
+    // Vérifie si l'utilisateur existe
+    const existingUser = await getUserById(con, userId);
+    if (existingUser.length === 0) {
+      throw new Error("Utilisateur introuvable.");
+    }
+
     const result = await deleteUser(con, userId);
     return result;
   } finally {

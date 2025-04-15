@@ -241,7 +241,6 @@ describe("Users Service", () => {
     });
 
     it("should update user details", async () => {
-        
       const result = await updateUser(userId, "testupdate", {
         pseudo: "updateduser",
         firstname: "Updated",
@@ -250,6 +249,17 @@ describe("Users Service", () => {
       });
 
       expect(result.affectedRows).toBe(1);
+    });
+
+    it("should throw an error if user does not exist", async () => {
+      await expect(
+        updateUser(9999, "nonexistent", {
+          pseudo: "updateduser",
+          firstname: "Updated",
+          lastname: "User",
+          birthDate: "1999-01-01",
+        })
+      ).rejects.toThrow("Utilisateur introuvable.");
     });
   });
 
@@ -275,6 +285,10 @@ describe("Users Service", () => {
       const result = await updateUserRole(userId, "gerant");
       expect(result.affectedRows).toBe(1);
     });
+
+    it("should throw an error if user does not exist", async () => {
+      await expect(updateUserRole(9999, "admin")).rejects.toThrow("Utilisateur introuvable.");
+    });
   });
 
   describe("updateUserPassword", () => {
@@ -299,6 +313,16 @@ describe("Users Service", () => {
       const result = await updateUserPassword(userId, "NewTest@12345678!");
       expect(result.affectedRows).toBe(1);
     });
+
+    it("should throw an error if user does not exist", async () => {
+      await expect(updateUserPassword(9999, "NewTest@12345678!")).rejects.toThrow("Utilisateur introuvable.");
+    });
+
+    it("should throw an error for invalid password format", async () => {
+      await expect(updateUserPassword(userId, "short")).rejects.toThrow(
+        "Veuillez écrire un mot de passe qui correspond à une de ces conditions"
+      );
+    });
   });
 
   describe("deleteUser", () => {
@@ -315,23 +339,17 @@ describe("Users Service", () => {
         externalId: "12345678",
       };
 
-      try {
-        const result = await signupUser(userData);
-        userId = result.insertId;
-      } catch (error) {
-        console.error("Error in deleteUser beforeAll (signupUser):", error);
-        throw error;
-      }
+      const result = await signupUser(userData);
+      userId = result.insertId;
     });
 
     it("should delete a user", async () => {
-      try {
-        const result = await deleteUser(userId);
-        expect(result.affectedRows).toBe(1);
-      } catch (error) {
-        console.error("Error in deleteUser test:", error);
-        throw error;
-      }
+      const result = await deleteUser(userId);
+      expect(result.affectedRows).toBe(1);
+    });
+
+    it("should throw an error if user does not exist", async () => {
+      await expect(deleteUser(9999)).rejects.toThrow("Utilisateur introuvable.");
     });
   });
 });

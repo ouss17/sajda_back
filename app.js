@@ -9,7 +9,7 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/usersRoute");
 var mosqueesRouter = require("./routes/mosquees");
-var categoriesRouter = require("./routes/categories");
+var categoriesRouter = require("./routes/categoriesRoute");
 var postsRouter = require("./routes/posts");
 var feedbacksRouter = require("./routes/feedbacks");
 var responsesRouter = require("./routes/responses");

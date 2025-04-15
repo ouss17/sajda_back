@@ -5,7 +5,7 @@ const {
   retrieveCategories,
   modifyCategory,
   removeCategory,
-} = require("../controllers/categories");
+} = require("../controllers/categoriesController");
 var router = express.Router();
 
 /* GET categories listing. */

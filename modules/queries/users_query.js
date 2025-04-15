@@ -27,7 +27,27 @@ const getUserByPseudoOrEmail = async (con, values) => {
   try {
     const rows = await con.query(query, values);
     // console.log("Query success, rows:", rows?.length);
-    console.log(rows[0]);
+    // console.log(rows[0]);
+    
+    return rows[0];
+  } catch (err) {
+    console.error("Query error:", err);
+    throw err;
+  }
+};
+
+const getUserById = async (con, values) => {
+  let query = `
+  SELECT *
+  FROM users 
+  WHERE id = ?;
+  `;
+
+  // Executing the query
+  try {
+    const rows = await con.query(query, values);
+    // console.log("Query success, rows:", rows?.length);
+    // console.log(rows[0]);
     
     return rows[0];
   } catch (err) {
@@ -161,6 +181,7 @@ module.exports = {
   createUser,
   getUserByPseudoOrEmail,
   deleteUser,
+  getUserById,
   updateUser,
   updateRole,
   updatePassword,

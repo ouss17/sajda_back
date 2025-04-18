@@ -5,10 +5,10 @@ const {
   addMosquee,
   retrieveMosquee,
   retrieveAllAvailableMosquee,
+  retrieveCsv,
   modifyMosquee,
   removeMosquee,
-  retrieveCsv,
-} = require("../controllers/mosquees");
+} = require("../controllers/mosqueesController");
 
 router.post("/", auth, addMosquee);
 router.get("/:mosqueeId", retrieveMosquee);

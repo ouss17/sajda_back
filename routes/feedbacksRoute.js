@@ -9,7 +9,7 @@ const {
   retrieveFeedbacksByTarget,
   modifyFeedback,
   removeFeedback,
-} = require("../controllers/feedbacks");
+} = require("../controllers/feedbacksController");
 
 router.post("/", auth, addFeedback);
 router.get("/feedback/:feedbackId", auth, retrieveOneFeedback);

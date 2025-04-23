@@ -25,7 +25,7 @@ describe("Users Service", () => {
   afterAll(async () => {
     try {
       if (connection) {
-        await connection.query('DELETE FROM users WHERE pseudo NOT IN (?, ?)', ['testmanu', 'admin']);
+        await connection.query('DELETE FROM users WHERE pseudo NOT IN (?, ?)', ['testmanu', 'testmanu23']);
         connection.release();
       }
     } catch (error) {

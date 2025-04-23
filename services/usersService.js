@@ -25,7 +25,7 @@ exports.signupUser = async (userData) => {
   const { pseudo, email, password, firstname, lastname, birthDate, externalId } = userData;
 
   // Vérifications des formats
-  if (!pseudo || !email || !password || !firstname || !lastname || !birthDate || !externalId) {
+  if (!pseudo || !email || !password || !birthDate || !externalId) {
     throw new Error("Champs manquants ou vides.");
   }
 

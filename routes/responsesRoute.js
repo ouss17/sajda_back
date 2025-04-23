@@ -7,7 +7,7 @@ const {
   retrieveResponsesByUser,
   modifyResponse,
   removeResponse,
-} = require("../controllers/responses");
+} = require("../controllers/responsesController");
 
 router.post("/", auth, addResponse);
 router.get("/response/:responseId", auth, retrieveOneResponse);

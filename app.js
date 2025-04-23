@@ -12,7 +12,7 @@ var mosqueesRouter = require("./routes/mosqueesRoute");
 var categoriesRouter = require("./routes/categoriesRoute");
 var postsRouter = require("./routes/postsRoute");
 var feedbacksRouter = require("./routes/feedbacksRoute");
-var responsesRouter = require("./routes/responses");
+var responsesRouter = require("./routes/responsesRoute");
 var notificationsRouter = require("./routes/notifications");
 
 require("./models/connection");

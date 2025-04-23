@@ -10,8 +10,8 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/usersRoute");
 var mosqueesRouter = require("./routes/mosqueesRoute");
 var categoriesRouter = require("./routes/categoriesRoute");
-var postsRouter = require("./routes/posts");
-var feedbacksRouter = require("./routes/feedbacks");
+var postsRouter = require("./routes/postsRoute");
+var feedbacksRouter = require("./routes/feedbacksRoute");
 var responsesRouter = require("./routes/responses");
 var notificationsRouter = require("./routes/notifications");
 

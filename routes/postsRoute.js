@@ -9,7 +9,7 @@ const {
   retrievePostsByCategory,
   modifyPost,
   removePost,
-} = require("../controllers/posts");
+} = require("../controllers/postsController");
 
 router.post("/", auth, addPost);
 router.get("/mosquee/:mosqueeId", retrievePostsByMosquee);

@@ -17,26 +17,48 @@ var notificationsRouter = require("./routes/notifications");
 
 require("./models/connection");
 
-// Ajouter <input type="hidden" name="_csrf" value="${res.locals.csrfToken}"> dans les formulaires
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Sajda API Documentation",
+      version: "1.0.0",
+      description: "Documentation générée automatiquement avec swagger-jsdoc",
+    },
+     components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "jwt",
+        },
+      },
+    },
+  },
+  apis: ["./routes/*.js", "./controllers/*.js"],
+};
+
+const uiOptions = {
+  swaggerOptions: {
+    requestInterceptor: (req) => {
+      req.headers['X-CSRF-Token'] = '8RKx6BoZ-IrnAHbXUWrfTv_wnCpuoiL5_tMs';
+      return req;
+    }
+  }
+};
+
+const swaggerSpec = swaggerJsdoc(options);
 var app = express();
-
 app.use(cookieParser());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, uiOptions));
 
-
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // Limite chaque IP à 100 requêtes par fenêtre de 15 minutes
-});
-app.use(limiter);
-
+// CSRF protection APPLIQUÉE APRÈS
 const csrfProtection = csurf({ cookie: true });
-app.use(csrfProtection);
 
-app.use((req, res, next) => {
-    res.locals.csrfToken = req.csrfToken();
-    next();
-});
+
 
 app.get('/api/csrf-token', (req, res) => {
     res.json({ csrfToken: req.csrfToken() });
@@ -56,13 +78,32 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/mosquees", mosqueesRouter);
-app.use("/categories", categoriesRouter);
-app.use("/posts", postsRouter);
-app.use("/feedbacks", feedbacksRouter);
-app.use("/responses", responsesRouter);
-app.use("/notifications", notificationsRouter);
+
+
+// Désactive CSRF pour toutes les routes API en DEV
+if (process.env.NODE_ENV === 'development') {
+  app.use('/users', usersRouter);
+  app.use('/mosquees', mosqueesRouter);
+  app.use('/categories', categoriesRouter);
+  app.use('/posts', postsRouter);
+  app.use('/feedbacks', feedbacksRouter);
+  app.use('/responses', responsesRouter);
+  app.use('/notifications', notificationsRouter);
+} else {
+  // En production, protège avec CSRF
+  app.use(csrfProtection);
+  app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+  app.use("/users", usersRouter);
+  app.use("/mosquees", mosqueesRouter);
+  app.use("/categories", categoriesRouter);
+  app.use("/posts", postsRouter);
+  app.use("/feedbacks", feedbacksRouter);
+  app.use("/responses", responsesRouter);
+  app.use("/notifications", notificationsRouter);
+}
 
 console.log("Server started");
 

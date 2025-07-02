@@ -110,6 +110,7 @@ exports.signinUser = async (pseudo, password, externalId) => {
     return {
       token,
       user: {
+        id: userRes.id,
         pseudo: userRes.pseudo,
         email: userRes.email,
         firstname: userRes.firstname,

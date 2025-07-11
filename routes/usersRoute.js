@@ -10,6 +10,7 @@ const {
   modifyRole,
   getMe,
   retrieveUsers,
+  retrieveUserById,
 } = require("../controllers/usersController");
 var router = express.Router();
 
@@ -269,4 +270,27 @@ router.delete("/delete/:userId", auth, removeUser);
  *         description: Déconnecté
  */
 router.get("/logout", auth, logout);
+
+/**
+ * @swagger
+ * /users/{userId}:
+ *   get:
+ *     summary: Récupérer un utilisateur par son id
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Utilisateur trouvé
+ *       404:
+ *         description: Utilisateur non trouvé
+ */
+router.get("/:userId", auth, retrieveUserById);
+
 module.exports = router;

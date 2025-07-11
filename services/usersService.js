@@ -146,13 +146,14 @@ exports.getAuthenticatedUser = async (pseudo) => {
 
     const userRes = user[0];
     return {
+      id: userRes.id,
       pseudo: userRes.pseudo,
       email: userRes.email,
       firstname: userRes.firstname,
       lastname: userRes.lastname,
       role: userRes.role,
       creation_timestamp: userRes.creation_timestamp,
-      birthDate: userRes.birthDate,
+      birthDate: userRes.birthdate,
     };
   } finally {
     if (con) con.release();
@@ -164,11 +165,11 @@ exports.updateUser = async (userId, currentPseudo, userData) => {
   const { pseudo, firstname, lastname, birthDate } = userData;
 
   // Vérifications des formats
-  if (!pseudo || !firstname || !lastname || !birthDate) {
+  if (!pseudo || !firstname || !lastname) {
     throw new Error("Champs manquants ou vides.");
   }
 
-  if (!isValidDateFormat(birthDate)) {
+  if (birthDate && !isValidDateFormat(birthDate)) {
     throw new Error("La date entrée est incorrecte.");
   }
 
@@ -249,6 +250,16 @@ exports.deleteUser = async (userId) => {
 
     const result = await deleteUser(con, userId);
     return result;
+  } finally {
+    if (con) con.release();
+  }
+};
+
+exports.getUserByIdService = async (userId) => {
+  const con = await getConnection();
+  try {
+    const user = await getUserById(con, [userId]);
+    return user && user.length > 0 ? user[0] : null;
   } finally {
     if (con) con.release();
   }

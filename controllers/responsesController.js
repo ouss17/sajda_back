@@ -5,6 +5,7 @@ const {
   getResponsesByUser,
   updateResponse,
   deleteResponse,
+  getAllResponsesByFeedback,
 } = require("../services/responsesService");
 
 /**
@@ -126,5 +127,22 @@ exports.removeResponse = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la suppression :", error);
     res.status(400).json({ result: false, error: error.message });
+  }
+};
+
+/**
+ * Get all responses for a feedback by feedback id
+ * @param {Object} req Object of the request
+ * @param {Object} res Object of the response
+ * @returns {Object} Object response
+ * @throws Exception if error occured in database, if authentification failed
+ */
+exports.retrieveResponsesByFeedback = async (req, res) => {
+  try {
+    const responses = await getAllResponsesByFeedback(req.params.feedbackId);
+    res.json({ result: true, data: responses });
+  } catch (error) {
+    console.error("Erreur lors de la récupération :", error);
+    res.status(500).json({ result: false, error: error.message });
   }
 };

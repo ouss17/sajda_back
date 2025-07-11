@@ -7,6 +7,7 @@ const {
   retrieveResponsesByUser,
   modifyResponse,
   removeResponse,
+  retrieveResponsesByFeedback, // <-- Ajoute cette ligne
 } = require("../controllers/responsesController");
 
 /**
@@ -140,5 +141,27 @@ router.put("/update/:responseId", auth, modifyResponse);
  *         description: Droits insuffisants ou réponse non trouvée
  */
 router.delete("/delete/:responseId", auth, removeResponse);
+
+/**
+ * @swagger
+ * /responses/feedback/{feedbackId}:
+ *   get:
+ *     summary: Récupérer toutes les réponses d'un feedback
+ *     tags: [Responses]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: feedbackId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Liste des réponses
+ *       500:
+ *         description: Erreur interne du serveur
+ */
+router.get("/feedback/:feedbackId", auth, retrieveResponsesByFeedback);
 
 module.exports = router;

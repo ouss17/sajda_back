@@ -15,6 +15,7 @@ const {
   updateUserRole,
   updateUserPassword,
   deleteUser,
+  getUserByIdService,
 } = require("../services/usersService");
 const JWT_SECRET = process.env.JWT_SECRET;
 const { getConnection } = require('../models/connection_mysql');
@@ -78,11 +79,12 @@ exports.modifyUser = async (req, res) => {
     const { pseudo: currentPseudo, id: currentId, role: currentRole, email: currentEmail } = req.user;
     const { pseudo, firstname, lastname, birthDate } = req.body;
 
-    if (!pseudo || !firstname || !lastname || !birthDate) {
+    if (!pseudo || !firstname || !lastname) {
       return res.status(400).json({ result: false, error: "Champs manquants ou vides." });
     }
 
-    if (!isValidDateFormat(birthDate)) {
+
+    if (birthDate && !isValidDateFormat(birthDate)) {
       return res.status(400).json({ result: false, error: "La date entrée est incorrecte." });
     }
 
@@ -197,4 +199,17 @@ exports.removeUser = async (req, res) => {
 exports.logout = (req, res) => {
   res.clearCookie("jwt");
   res.json({ result: true });
+};
+
+exports.retrieveUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await getUserByIdService(userId);
+    if (!user) {
+      return res.status(404).json({ result: false, error: "Utilisateur non trouvé." });
+    }
+    res.json({ result: true, data: user });
+  } catch (error) {
+    res.status(500).json({ result: false, error: error.message });
+  }
 };

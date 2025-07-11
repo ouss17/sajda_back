@@ -81,7 +81,7 @@ exports.updatePost = async (postId, postData) => {
   const { title, content, media, id_category, active, id_user } = postData;
 
   // Vérification des champs requis
-  if (!checkBody(postData, ["title", "content", "id_category", "active"])) {
+  if (!checkBody(postData, ["title", "content", "id_category"])) {
     throw new Error("Champs manquants ou vides.");
   }
 

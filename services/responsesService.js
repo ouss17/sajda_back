@@ -5,6 +5,7 @@ const {
   getOneResponseFeedback,
   deleteResponseFeedback,
   getAllResponseFeedbacksByUser,
+  getAllResponseFeedbacksByFeedback,
 } = require("../modules/queries/responses_query");
 const { checkBody } = require("../modules/checkBody");
 
@@ -48,6 +49,18 @@ exports.getResponsesByUser = async (userId) => {
   try {
     const feedbacks = await getAllResponseFeedbacksByUser(con, userId);
     return feedbacks;
+  } finally {
+    if (con) con.release();
+  }
+};
+
+exports.getAllResponsesByFeedback = async (feedbackId) => {
+  const con = await getConnection();
+
+  try {
+    const feedbacks = await getAllResponseFeedbacksByFeedback(con, [feedbackId]);
+    return feedbacks;
+    
   } finally {
     if (con) con.release();
   }

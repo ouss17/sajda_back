@@ -89,8 +89,8 @@ exports.retrievePostsAvailable = async (req, res) => {
 exports.modifyPost = async (req, res) => {
   const { title, content, media, id_category, active } = req.body;
   const { id, role } = req.user;
-
-  if (!checkBody(req.body, ["title", "content", "id_category", "active"])) {
+  
+  if (!checkBody(req.body, ["title", "content", "id_category"])) {
     return res.status(400).json({
       result: false,
       error: "Vous n'avez pas rempli tous les champs.",

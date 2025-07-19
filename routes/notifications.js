@@ -7,6 +7,7 @@ const {
   addNotification,
   modifyNotification,
   removeNotification,
+  getLastNotificationByExternalId
 } = require("../controllers/notifications");
 var router = express.Router();
 /**
@@ -47,8 +48,6 @@ router.get("/notification/:notificationId", getOneNotification);
  *   post:
  *     summary: Ajouter une notification
  *     tags: [Notifications]
- *     security:
- *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -66,7 +65,7 @@ router.get("/notification/:notificationId", getOneNotification);
  *       400:
  *         description: Champs manquants ou droits insuffisants
  */
-router.post("/", auth, addNotification);
+router.post("/", addNotification);
 
 /**
  * @swagger
@@ -124,4 +123,24 @@ router.put("/update/:notificationId", auth, modifyNotification);
  *         description: Droits insuffisants
  */
 router.delete("/delete/:notificationId", auth, removeNotification);
+
+/**
+ * @swagger
+ * /notifications/external/{externalId}:
+ *   get:
+ *     summary: Récupérer une notification externe par son ID
+ *     tags: [Notifications]
+ *     parameters:
+ *       - in: path
+ *         name: externalId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Notification externe trouvée
+ *       404:
+ *         description: Notification externe non trouvée
+ */
+router.get('/external/:externalId', getLastNotificationByExternalId);
 module.exports = router;

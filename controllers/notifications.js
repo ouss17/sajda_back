@@ -34,26 +34,21 @@ exports.getOneNotification = async (req, res) => {
 
 
 exports.addNotification = async (req, res) => {
-  let { message} = req.body;
-  if (!checkBody(req.body, ["message"])) {
-    return res.status(400).json({
-      result: false,
-      error: "Vous n'avez pas rempli tous les champs.",
-    });
-  }
-  if(req.user.role !== "admin" || req.user.role === "gerant") {
-    return res.status(400).json({
-      result: false,
-      error: "Vous n'avez pas les droits pour ajouter une notification !",
-    });
-  }
+  let { all, fajr, dhuhr, asr, maghrib, isha, externalId } = req.body;
   try {
     const db = await connectToDatabase();
     const notifications = db.collection("notifications");
-    const result = await notifications.insertOne({ message });
-    res.json({ result: true, response: "Notification ajoutée", data: result });
+    const result = await notifications.updateOne(
+      { externalId },
+      {
+        $set: { all, fajr, dhuhr, asr, maghrib, isha, externalId }
+      },
+      { upsert: true }
+    );
+    res.json({ result: true, response: result.upsertedCount ? "Notification ajoutée" : "Notification modifiée", data: result });
   } catch (error) {
     console.error("Erreur :", error);
+    res.status(500).json({ result: false, error: "Erreur serveur." });
   }
 };
 exports.modifyNotification = async (req, res) => {
@@ -111,6 +106,22 @@ exports.removeNotification = async (req, res) => {
     const notifications = db.collection("notifications");
     const result = await notifications.deleteOne({ _id: notificationId });
     res.json({ result: true, response: "Notification supprimée", data: result });
+  } catch (error) {
+    console.error("Erreur :", error);
+    res.status(500).json({ result: false, error: "Erreur serveur." });
+  }
+};
+exports.getLastNotificationByExternalId = async (req, res) => {
+  const { externalId } = req.params;
+  try {
+    const db = await connectToDatabase();
+    const notifications = db.collection("notifications");
+    const notif = await notifications
+      .find({ externalId })
+      .sort({ _id: -1 })
+      .limit(1)
+      .toArray();
+    res.json({ result: true, data: notif[0] || null });
   } catch (error) {
     console.error("Erreur :", error);
     res.status(500).json({ result: false, error: "Erreur serveur." });
